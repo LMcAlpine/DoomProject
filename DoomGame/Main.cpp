@@ -6,8 +6,16 @@
 
 int main()
 {
-    WADReader wadReader;
-    wadReader.readFileData("./DOOM.WAD");
-    return 0;
+	try
+	{
+		WADReader wadReader;
+		wadReader.readFileData("./DOOM.WAD");
+		return 0;
+	}
+	catch (const std::runtime_error& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+		return 1;
+	}
 }
 
