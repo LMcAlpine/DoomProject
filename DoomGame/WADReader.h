@@ -1,8 +1,10 @@
 #pragma once
+#include <iostream>
 #include <filesystem>
 #include <vector>
 #include <fstream> 
 #include <cstddef>
+#include "DataTypes.h"
 class WADReader
 {
 public:
@@ -10,7 +12,7 @@ public:
 
 	std::vector<std::byte> readFileData(const std::string& name);
 
-	std::string extractID(std::vector<std::byte>& buffer);
+	void extractID(std::vector<std::byte>& buffer, Header &header);
 
 	~WADReader();
 

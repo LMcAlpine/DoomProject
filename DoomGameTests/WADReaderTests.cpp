@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "../DoomGame/WADReader.h"
 #include "../DoomGame/WADReader.cpp"
+#include "../DoomGame/DataTypes.h"
 
 class WADReaderTests : public ::testing::Test 
 {
 protected:
 	WADReader wadReader;
+	Header header;
 };
 
 
@@ -19,5 +21,7 @@ static TEST_F(WADReaderTests, HandleNonExistentFile)
 static TEST_F(WADReaderTests, HandleHeaderID) 
 {
 	auto buffer = wadReader.readFileData("./DOOM.WAD");
-	ASSERT_EQ(wadReader.extractID(buffer), "IWAD");
+	Header header;
+	wadReader.extractID(buffer, header);
+	ASSERT_EQ(std::string(header.WADType), "IWAD");
 }

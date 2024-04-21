@@ -28,13 +28,12 @@ std::vector<std::byte> WADReader::readFileData(const std::string& name)
 	return buffer;
 }
 
-std::string WADReader::extractID(std::vector<std::byte>& buffer)
+void WADReader::extractID(std::vector<std::byte>& buffer,Header &header)
 {
-	char id[5] = {};
 	for (int i = 0; i < 4; i++)
 	{
-		id[i] = (char)buffer.at(i);
+		header.WADType[i] = (char)buffer.at(i);
 	}
-	id[4] = '\0';
-	return std::string(id);
+
+	header.WADType[4] = '\0';
 }

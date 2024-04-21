@@ -8,8 +8,11 @@ int main()
 {
 	try
 	{
+		Header header;
+
 		WADReader wadReader;
-		wadReader.readFileData("./DOOM.WAD");
+		auto buffer = wadReader.readFileData("./DOOM.WAD");
+		wadReader.extractID(buffer,header);
 		return 0;
 	}
 	catch (const std::runtime_error& e)
