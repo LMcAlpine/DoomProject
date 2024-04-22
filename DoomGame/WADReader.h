@@ -12,7 +12,12 @@ public:
 
 	std::vector<std::byte> readFileData(const std::string& name);
 
-	void extractID(std::vector<std::byte>& buffer, Header &header);
+	void extractID(std::vector<std::byte>& buffer, Header& header);
+
+
+	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
+
+	uint32_t read4Bytes(std::vector<std::byte>& buffer, int offset);
 
 	~WADReader();
 

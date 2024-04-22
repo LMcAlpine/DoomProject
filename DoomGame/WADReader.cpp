@@ -28,7 +28,7 @@ std::vector<std::byte> WADReader::readFileData(const std::string& name)
 	return buffer;
 }
 
-void WADReader::extractID(std::vector<std::byte>& buffer,Header &header)
+void WADReader::extractID(std::vector<std::byte>& buffer, Header& header)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -36,4 +36,26 @@ void WADReader::extractID(std::vector<std::byte>& buffer,Header &header)
 	}
 
 	header.WADType[4] = '\0';
+}
+
+uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
+{
+	if (offset < 0 || buffer.size() < offset + sizeof(uint16_t))
+	{
+		throw std::runtime_error("Buffer overflow prevented. Buffer size: " + std::to_string(buffer.size()) + ", Required size from offset: " + std::to_string(offset + sizeof(uint16_t)));
+	}
+	uint16_t value;
+	std::memcpy(&value, buffer.data() + offset, sizeof(uint16_t));
+	return value;
+}
+
+uint32_t WADReader::read4Bytes(std::vector<std::byte>& buffer, int offset)
+{
+	if (offset < 0 || buffer.size() < offset + sizeof(uint32_t))
+	{
+		throw std::runtime_error("Buffer overflow prevented. Buffer size: " + std::to_string(buffer.size()) + ", Required size from offset: " + std::to_string(offset + sizeof(uint32_t)));
+	}
+	uint32_t value;
+	std::memcpy(&value, buffer.data() + offset, sizeof(uint32_t));
+	return value;
 }
