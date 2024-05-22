@@ -14,6 +14,7 @@ public:
 
 	void extractID(std::vector<std::byte>& buffer, Header& header);
 
+	void extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int offset);
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 
