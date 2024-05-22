@@ -38,6 +38,11 @@ void WADReader::extractID(std::vector<std::byte>& buffer, Header& header)
 	header.WADType[4] = '\0';
 }
 
+void WADReader::extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int offset)
+{
+	header.totalLumps = read4Bytes(buffer, offset);
+}
+
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
 {
 	if (offset < 0 || buffer.size() < offset + sizeof(uint16_t))

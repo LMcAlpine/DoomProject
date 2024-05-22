@@ -3,7 +3,7 @@
 
 struct Header
 {
-	char WADType[5];
-	uint32_t directoryCount;
-	uint32_t directoryOffset;
+	char WADType[5]{};
+	uint32_t totalLumps{};
+	uint32_t directoryOffset{};
 };
