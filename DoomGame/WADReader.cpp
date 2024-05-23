@@ -28,6 +28,12 @@ std::vector<std::byte> WADReader::readFileData(const std::string& name)
 	return buffer;
 }
 
+void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header)
+{
+	extractID(buffer, header);
+	extractTotalLumps(buffer, header, 4);
+}
+
 void WADReader::extractID(std::vector<std::byte>& buffer, Header& header)
 {
 	for (int i = 0; i < 4; i++)

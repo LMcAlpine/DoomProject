@@ -12,6 +12,8 @@ public:
 
 	std::vector<std::byte> readFileData(const std::string& name);
 
+	void readHeader(std::vector<std::byte>& buffer, Header& header);
+
 	void extractID(std::vector<std::byte>& buffer, Header& header);
 
 	void extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int offset);
