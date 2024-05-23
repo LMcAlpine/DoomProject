@@ -12,11 +12,11 @@ public:
 
 	std::vector<std::byte> readFileData(const std::string& name);
 
-	void readHeader(std::vector<std::byte>& buffer, Header& header);
+	void readHeader(std::vector<std::byte>& buffer, Header& header, int& offset);
 
-	void extractID(std::vector<std::byte>& buffer, Header& header);
+	void extractID(std::vector<std::byte>& buffer, Header& header, int& offset);
 
-	void extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int offset);
+	void extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int& offset);
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 

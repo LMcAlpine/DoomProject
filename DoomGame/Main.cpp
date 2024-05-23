@@ -12,7 +12,8 @@ int main()
 
 		WADReader wadReader;
 		auto buffer = wadReader.readFileData("./DOOM.WAD");
-		wadReader.readHeader(buffer, header);
+		int offset = 0;
+		wadReader.readHeader(buffer, header, offset);
 		return 0;
 	}
 	catch (const std::runtime_error& e)

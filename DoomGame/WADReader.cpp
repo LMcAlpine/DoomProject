@@ -28,13 +28,13 @@ std::vector<std::byte> WADReader::readFileData(const std::string& name)
 	return buffer;
 }
 
-void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header)
+void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& offset)
 {
-	extractID(buffer, header);
-	extractTotalLumps(buffer, header, 4);
+	extractID(buffer, header, offset);
+	extractTotalLumps(buffer, header, offset);
 }
 
-void WADReader::extractID(std::vector<std::byte>& buffer, Header& header)
+void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& offset)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -42,11 +42,13 @@ void WADReader::extractID(std::vector<std::byte>& buffer, Header& header)
 	}
 
 	header.WADType[4] = '\0';
+	offset += 4;
 }
 
-void WADReader::extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int offset)
+void WADReader::extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int& offset)
 {
 	header.totalLumps = read4Bytes(buffer, offset);
+	offset += 4;
 }
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)

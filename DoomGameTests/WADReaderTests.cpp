@@ -8,6 +8,7 @@ class WADReaderTests : public ::testing::Test
 protected:
 	WADReader wadReader;
 	Header header{};
+	int offset = 0;
 };
 
 static TEST_F(WADReaderTests, HandleNonExistentFile)
@@ -19,7 +20,7 @@ static TEST_F(WADReaderTests, HandleNonExistentFile)
 static TEST_F(WADReaderTests, HandleHeaderID)
 {
 	auto buffer = wadReader.readFileData("./DOOM.WAD");
-	wadReader.extractID(buffer, header);
+	wadReader.extractID(buffer, header, offset);
 	ASSERT_EQ(std::string(header.WADType), "IWAD");
 }
 
@@ -89,6 +90,7 @@ static TEST_F(WADReaderTests, HandleOutOfBoundsEqual)
 static TEST_F(WADReaderTests, HandleTotalLumps)
 {
 	auto buffer = wadReader.readFileData("./DOOM.WAD");
-	wadReader.extractTotalLumps(buffer, header, 4);
+	offset += 4;
+	wadReader.extractTotalLumps(buffer, header, offset);
 	ASSERT_EQ(header.totalLumps, 2306);
 }
