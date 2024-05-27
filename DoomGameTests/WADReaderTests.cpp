@@ -31,6 +31,14 @@ static TEST_F(WADReaderTests, HandleHeaderIDPWAD)
 	ASSERT_EQ(std::string(header.WADType), "PWAD");
 }
 
+static TEST_F(WADReaderTests, HandleTotalLumps)
+{
+	auto buffer = wadReader.readFileData("./DOOM.WAD");
+	offset += 4;
+	wadReader.extractTotalLumps(buffer, header, offset);
+	ASSERT_EQ(header.totalLumps, 2306);
+}
+
 static TEST_F(WADReaderTests, HandleRead2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
@@ -92,12 +100,4 @@ static TEST_F(WADReaderTests, HandleOutOfBoundsEqual)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04} };
 	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 67305985);
-}
-
-static TEST_F(WADReaderTests, HandleTotalLumps)
-{
-	auto buffer = wadReader.readFileData("./DOOM.WAD");
-	offset += 4;
-	wadReader.extractTotalLumps(buffer, header, offset);
-	ASSERT_EQ(header.totalLumps, 2306);
 }

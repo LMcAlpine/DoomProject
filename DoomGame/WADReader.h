@@ -16,7 +16,9 @@ public:
 
 	void extractID(std::vector<std::byte>& buffer, Header& header, int& offset);
 
-	void extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int& offset);
+	void extractNumDirectories(std::vector<std::byte>& buffer, Header& header, int& offset);
+
+	void extractDirectoryOffset(std::vector<std::byte>& buffer, Header& header, int& offset);
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 
