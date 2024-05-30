@@ -35,14 +35,14 @@ static TEST_F(WADReaderTests, HandleTotalLumps)
 {
 	auto buffer = wadReader.readFileData("./DOOM.WAD");
 	offset += 4;
-	wadReader.extractTotalLumps(buffer, header, offset);
-	ASSERT_EQ(header.totalLumps, 2306);
+	wadReader.extractNumDirectories(buffer, header, offset);
+	ASSERT_EQ(header.numDirectories, 2306);
 }
 
 static TEST_F(WADReaderTests, HandleRead2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
-	// Expecting 513 because 0x0201 in little-endian is 0x01 at the LSB and 0x02 at the MSB and is the decimal representation
+	// Expecting 513 because 0x0201 in little-endian is 0x01 at the LSB and 0x02 at the MSB and 513 is the decimal representation
 	ASSERT_EQ(wadReader.read2Bytes(buffer, 0), 513);
 }
 

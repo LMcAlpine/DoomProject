@@ -7,3 +7,10 @@ struct Header
 	uint32_t numDirectories{};		// #lumps in directory
 	uint32_t directoryOffset{};		// Offset to directory
 };
+
+struct DirectoryEntry
+{
+	uint32_t offset;				// Offset to lump
+	uint32_t size;					// Size of the lump
+	char name[9];					// Name of the lump
+};
