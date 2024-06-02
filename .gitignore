@@ -365,3 +365,6 @@ FodyWeavers.xsd
 
 # Ignore DOOM.WAD file
 /DoomGame/DOOM.WAD
+
+# Ignore PWAD file
+/DoomGame/mytestmap.wad

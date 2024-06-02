@@ -31,7 +31,8 @@ std::vector<std::byte> WADReader::readFileData(const std::string& name)
 void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& offset)
 {
 	extractID(buffer, header, offset);
-	extractTotalLumps(buffer, header, offset);
+	extractNumDirectories(buffer, header, offset);
+	extractDirectoryOffset(buffer, header, offset);
 }
 
 void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& offset)
@@ -45,10 +46,15 @@ void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& o
 	offset += 4;
 }
 
-void WADReader::extractTotalLumps(std::vector<std::byte>& buffer, Header& header, int& offset)
+void WADReader::extractNumDirectories(std::vector<std::byte>& buffer, Header& header, int& offset)
 {
-	header.totalLumps = read4Bytes(buffer, offset);
+	header.numDirectories = read4Bytes(buffer, offset);
 	offset += 4;
+}
+
+void WADReader::extractDirectoryOffset(std::vector<std::byte>& buffer, Header& header, int& offset)
+{
+	header.directoryOffset = read4Bytes(buffer, offset);
 }
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
