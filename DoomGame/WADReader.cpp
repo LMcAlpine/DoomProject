@@ -33,6 +33,14 @@ void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& 
 	extractID(buffer, header, offset);
 	extractNumDirectories(buffer, header, offset);
 	extractDirectoryOffset(buffer, header, offset);
+	
+}
+
+void WADReader::readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	readLumpOffset(buffer, directoryEntry, offset);
+	readLumpSize(buffer, directoryEntry, offset);
+	readLumpName(buffer, directoryEntry, offset);
 }
 
 void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& offset)
@@ -56,6 +64,29 @@ void WADReader::extractDirectoryOffset(std::vector<std::byte>& buffer, Header& h
 {
 	header.directoryOffset = read4Bytes(buffer, offset);
 }
+
+void WADReader::readLumpOffset(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	directoryEntry.offset = read4Bytes(buffer, offset);
+	offset += 4;
+
+}
+
+void WADReader::readLumpSize(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	directoryEntry.size = read4Bytes(buffer, offset);
+	offset += 4;
+}
+
+void WADReader::readLumpName(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		directoryEntry.name[i] = (char)buffer.at(offset++);
+	}
+}
+
+
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
 {
