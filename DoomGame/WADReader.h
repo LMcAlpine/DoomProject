@@ -7,6 +7,7 @@
 #include "DataTypes.h"
 class WADReader
 {
+	std::vector<DirectoryEntry> directory{};
 public:
 	WADReader();
 
@@ -14,7 +15,7 @@ public:
 
 	void readHeader(std::vector<std::byte>& buffer, Header& header, int& offset);
 
-	void readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset);
+	void readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry,Header& header, uint32_t& offset);
 
 	void extractID(std::vector<std::byte>& buffer, Header& header, int& offset);
 

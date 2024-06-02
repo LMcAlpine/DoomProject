@@ -33,14 +33,28 @@ void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& 
 	extractID(buffer, header, offset);
 	extractNumDirectories(buffer, header, offset);
 	extractDirectoryOffset(buffer, header, offset);
-	
+
 }
 
-void WADReader::readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+void WADReader::readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, Header& header, uint32_t& offset)
 {
-	readLumpOffset(buffer, directoryEntry, offset);
-	readLumpSize(buffer, directoryEntry, offset);
-	readLumpName(buffer, directoryEntry, offset);
+	for (int i = 0; i < header.numDirectories; i++)
+	{
+		DirectoryEntry de;
+		readLumpOffset(buffer, de, offset);
+		readLumpSize(buffer, de, offset);
+		readLumpName(buffer, de, offset);
+		directory.push_back(de);
+	}
+	//readLumpOffset(buffer, directoryEntry, offset);
+	//readLumpSize(buffer, directoryEntry, offset);
+	//readLumpName(buffer, directoryEntry, offset);
+
+	////offset += 16;
+	//DirectoryEntry de;
+	//readLumpOffset(buffer, de, offset);
+	//readLumpSize(buffer, de, offset);
+	//readLumpName(buffer, de, offset);
 }
 
 void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& offset)
