@@ -10,7 +10,7 @@ struct Header
 
 struct DirectoryEntry
 {
-	uint32_t offset;				// Offset to lump
-	uint32_t size;					// Size of the lump
-	char name[9];					// Name of the lump
+	uint32_t offset{};				// Offset to lump
+	uint32_t size{};				// Size of the lump
+	char name[8]{};					// Name of the lump
 };

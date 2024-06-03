@@ -33,6 +33,43 @@ void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& 
 	extractID(buffer, header, offset);
 	extractNumDirectories(buffer, header, offset);
 	extractDirectoryOffset(buffer, header, offset);
+
+}
+
+void WADReader::readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, Header& header, uint32_t& offset)
+{
+	// I began by trying to read just one lump. The very first one. 
+
+	// I was mistakenly incrementing the offset for the lump name by 8 each time. So it did not get the right characters
+	// The offset only needs to be incremented by one for each character in the name because the characters are stored next to each other in memory
+
+	// Then I tried to read the first two lumps.
+	// I realized I needed to create a new directory entry struct so as not to put the same thing in the vector. Might be able to reuse the struct?
+	// but I think if I reused the struct then every single element will get updated to be the last added entry
+	// Anyways, I thought to get to the next entry in the directory I had to increment the offset by 16 before reading the second lump
+	// However, I determined I don't need to do this because as part of the process of reading the lump offset, lump size, and lump name, I was already incrementing
+	// by 4, 4, and 8 to get 16. So after each new entry it will bring the offset to the correct location to read the next entry
+	// Then I simply iterated through the number of directories in the header and that was how I got all the lump data from the WAD file
+
+	// next I will need to see about the name of a lump being less than 8 bytes long, and null padding it to the right byte. 
+
+	for (int i = 0; i < header.numDirectories; i++)
+	{
+		DirectoryEntry de;
+		readLumpOffset(buffer, de, offset);
+		readLumpSize(buffer, de, offset);
+		readLumpName(buffer, de, offset);
+		directory.push_back(de);
+	}
+	//readLumpOffset(buffer, directoryEntry, offset);
+	//readLumpSize(buffer, directoryEntry, offset);
+	//readLumpName(buffer, directoryEntry, offset);
+
+	////offset += 16;
+	//DirectoryEntry de;
+	//readLumpOffset(buffer, de, offset);
+	//readLumpSize(buffer, de, offset);
+	//readLumpName(buffer, de, offset);
 }
 
 void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& offset)
@@ -56,6 +93,29 @@ void WADReader::extractDirectoryOffset(std::vector<std::byte>& buffer, Header& h
 {
 	header.directoryOffset = read4Bytes(buffer, offset);
 }
+
+void WADReader::readLumpOffset(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	directoryEntry.offset = read4Bytes(buffer, offset);
+	offset += 4;
+
+}
+
+void WADReader::readLumpSize(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	directoryEntry.size = read4Bytes(buffer, offset);
+	offset += 4;
+}
+
+void WADReader::readLumpName(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		directoryEntry.name[i] = (char)buffer.at(offset++);
+	}
+}
+
+
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
 {
