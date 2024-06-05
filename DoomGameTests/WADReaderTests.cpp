@@ -93,8 +93,6 @@ static TEST_F(WADReaderTests, HandleRead4Bytes)
 	// 0x04030201 from bytes 04, 03, 01 and 02
 	// For each pair of bytes, the byte at the lower address is the LSB, and the byte at the higher address is the MSB
 	// - The byte 0x01 (lower address) is the LSB, and the byte 0x04 (higher address) is the MSB, forming the four-byte integer value 0x04030201.
-	// In decimal:
-	// - 0x04030201 is 67305985
 
 	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 0x04030201);
 }
