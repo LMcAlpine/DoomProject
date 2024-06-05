@@ -53,13 +53,9 @@ static TEST_F(WADReaderTests, HandleRead2Bytes)
 	// - The byte 0x01 (lower address) is the LSB, and the byte 0x02 (higher address) is the MSB, forming the two-byte integer value 0x0201.
 	// - The byte 0x03 (lower address) is the LSB, and the byte 0x04 (higher address) is the MSB, forming the two-byte integer value 0x0403.
 	// - The byte 0x05 (lower address) is the LSB, and the byte 0x06 (higher address) is the MSB, forming the two-byte integer value 0x0605.
-	// In decimal:
-	// - 0x0201 is 513
-	// - 0x0403 is 1027
-	// - 0x0605 is 1541
-	ASSERT_EQ(wadReader.read2Bytes(buffer, 0), 513);
-	ASSERT_EQ(wadReader.read2Bytes(buffer, 2), 1027);
-	ASSERT_EQ(wadReader.read2Bytes(buffer, 4), 1541);
+	ASSERT_EQ(wadReader.read2Bytes(buffer, 0), 0x0201);
+	ASSERT_EQ(wadReader.read2Bytes(buffer, 2), 0x0403);
+	ASSERT_EQ(wadReader.read2Bytes(buffer, 4), 0x0605);
 }
 
 static TEST_F(WADReaderTests, HandleReadOutOfBounds2Bytes)
@@ -83,7 +79,7 @@ static TEST_F(WADReaderTests, HandleOffsetOutOfBoundsGreater2Bytes)
 static TEST_F(WADReaderTests, HandleOutOfBoundsEqual2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02} };
-	ASSERT_EQ(wadReader.read2Bytes(buffer, 0), 513);
+	ASSERT_EQ(wadReader.read2Bytes(buffer, 0), 0x0201);
 }
 
 
@@ -100,7 +96,7 @@ static TEST_F(WADReaderTests, HandleRead4Bytes)
 	// In decimal:
 	// - 0x04030201 is 67305985
 
-	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 67305985);
+	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 0x04030201);
 }
 
 static TEST_F(WADReaderTests, HandleReadOutOfBounds)
@@ -124,5 +120,5 @@ static TEST_F(WADReaderTests, HandleOffsetOutOfBoundsGreater)
 static TEST_F(WADReaderTests, HandleOutOfBoundsEqual)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04} };
-	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 67305985);
+	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 0x04030201);
 }
