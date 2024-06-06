@@ -34,6 +34,8 @@ void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& 
 	extractNumDirectories(buffer, header, offset);
 	extractDirectoryOffset(buffer, header, offset);
 
+
+
 }
 
 void WADReader::readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, Header& header, uint32_t& offset)
@@ -88,6 +90,31 @@ void WADReader::readLumpName(std::vector<std::byte>& buffer, DirectoryEntry& dir
 	for (int i = 0; i < 8; i++)
 	{
 		directoryEntry.name[i] = (char)buffer.at(offset++);
+	}
+}
+
+int WADReader::searchForLump(const std::string& name)
+{
+
+	for (int i = 0; i < directory.size(); i++)
+	{
+		if (std::string(directory.at(i).name) == name)
+		{
+			return i;
+		}
+	}
+}
+
+void WADReader::readVertexes(std::vector<std::byte>& buffer, int index)
+{
+	DirectoryEntry vertexLump = directory.at(index + 4);
+	Vertex vertex;
+	for (int i = 0; i < vertexLump.size / sizeof(int); i++)
+	{
+		vertex.x = read2Bytes(buffer, vertexLump.offset);
+		vertex.y = read2Bytes(buffer, vertexLump.offset + sizeof(short));
+		vertexes.push_back(vertex);
+		vertexLump.offset += sizeof(int);
 	}
 }
 

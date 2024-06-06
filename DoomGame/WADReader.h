@@ -8,6 +8,7 @@
 class WADReader
 {
 	std::vector<DirectoryEntry> directory{};
+	std::vector<Vertex> vertexes{};
 public:
 	WADReader();
 
@@ -28,6 +29,10 @@ public:
 	void readLumpSize(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset);
 
 	void readLumpName(std::vector <std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset);
+
+	int searchForLump(const std::string& name);
+
+	void readVertexes(std::vector<std::byte>& buffer,int index);
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 
