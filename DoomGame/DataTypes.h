@@ -19,3 +19,15 @@ struct Vertex
 	short x{};
 	short y{};
 };
+
+enum LumpsIndex
+{
+	things = 1,
+	linedefs,
+	sidedefs,
+	vertexes,
+	segs,
+	ssectors,
+	nodes,
+	sectors
+};

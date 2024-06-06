@@ -16,7 +16,7 @@ public:
 
 	void readHeader(std::vector<std::byte>& buffer, Header& header, int& offset);
 
-	void readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry,Header& header, uint32_t& offset);
+	void readDirectory(std::vector<std::byte>& buffer, Header& header, uint32_t& offset);
 
 	void extractID(std::vector<std::byte>& buffer, Header& header, int& offset);
 
@@ -32,7 +32,7 @@ public:
 
 	int searchForLump(const std::string& name);
 
-	void readVertexes(std::vector<std::byte>& buffer,int index);
+	void readVertexes(std::vector<std::byte>& buffer, int index);
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 

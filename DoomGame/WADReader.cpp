@@ -33,12 +33,9 @@ void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& 
 	extractID(buffer, header, offset);
 	extractNumDirectories(buffer, header, offset);
 	extractDirectoryOffset(buffer, header, offset);
-
-
-
 }
 
-void WADReader::readDirectory(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, Header& header, uint32_t& offset)
+void WADReader::readDirectory(std::vector<std::byte>& buffer, Header& header, uint32_t& offset)
 {
 	DirectoryEntry de;
 	for (int i = 0; i < header.numDirectories; i++)
@@ -58,13 +55,13 @@ void WADReader::extractID(std::vector<std::byte>& buffer, Header& header, int& o
 	}
 
 	header.WADType[4] = '\0';
-	offset += 4;
+	offset += sizeof(uint32_t);
 }
 
 void WADReader::extractNumDirectories(std::vector<std::byte>& buffer, Header& header, int& offset)
 {
 	header.numDirectories = read4Bytes(buffer, offset);
-	offset += 4;
+	offset += sizeof(uint32_t);
 }
 
 void WADReader::extractDirectoryOffset(std::vector<std::byte>& buffer, Header& header, int& offset)
@@ -75,14 +72,14 @@ void WADReader::extractDirectoryOffset(std::vector<std::byte>& buffer, Header& h
 void WADReader::readLumpOffset(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
 {
 	directoryEntry.offset = read4Bytes(buffer, offset);
-	offset += 4;
+	offset += sizeof(uint32_t);
 
 }
 
 void WADReader::readLumpSize(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
 {
 	directoryEntry.size = read4Bytes(buffer, offset);
-	offset += 4;
+	offset += sizeof(uint32_t);
 }
 
 void WADReader::readLumpName(std::vector<std::byte>& buffer, DirectoryEntry& directoryEntry, uint32_t& offset)
@@ -103,18 +100,20 @@ int WADReader::searchForLump(const std::string& name)
 			return i;
 		}
 	}
+	return -1;
 }
 
 void WADReader::readVertexes(std::vector<std::byte>& buffer, int index)
 {
-	DirectoryEntry vertexLump = directory.at(index + 4);
+	index += LumpsIndex::vertexes;
+	DirectoryEntry vertexLump = directory.at(index);
 	Vertex vertex;
-	for (int i = 0; i < vertexLump.size / sizeof(int); i++)
+	for (int i = 0; i < vertexLump.size / sizeof(Vertex); i++)
 	{
 		vertex.x = read2Bytes(buffer, vertexLump.offset);
-		vertex.y = read2Bytes(buffer, vertexLump.offset + sizeof(short));
+		vertex.y = read2Bytes(buffer, vertexLump.offset + sizeof(uint16_t));
 		vertexes.push_back(vertex);
-		vertexLump.offset += sizeof(int);
+		vertexLump.offset += sizeof(uint32_t);
 	}
 }
 
