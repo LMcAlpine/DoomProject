@@ -9,6 +9,7 @@ class WADReader
 {
 	std::vector<DirectoryEntry> directory{};
 	std::vector<Vertex> vertexes{};
+	std::vector<Linedef> linedefs{};
 public:
 	WADReader();
 
@@ -33,6 +34,8 @@ public:
 	int searchForLump(const std::string& name);
 
 	void readVertexes(std::vector<std::byte>& buffer, int index);
+
+	void readLinedefs(std::vector<std::byte>& buffer, int index);
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 
