@@ -17,6 +17,7 @@ int main()
 		wadReader.readDirectory(buffer, header, header.directoryOffset);
 		int index = wadReader.searchForLump("E1M1");
 		wadReader.readVertexes(buffer, index);
+		wadReader.readLinedefs(buffer, index);
 		return 0;
 	}
 	catch (const std::runtime_error& e)

@@ -117,6 +117,25 @@ void WADReader::readVertexes(std::vector<std::byte>& buffer, int index)
 	}
 }
 
+void WADReader::readLinedefs(std::vector<std::byte>& buffer, int index)
+{
+	index += LumpsIndex::linedefs;
+	DirectoryEntry linedefsLump = directory.at(index);
+	Linedef linedef;
+	for (int i = 0; i < linedefsLump.size / sizeof(Linedef); i++)
+	{
+		linedef.startVertex = read2Bytes(buffer, linedefsLump.offset);
+		linedef.endVertex = read2Bytes(buffer, linedefsLump.offset + sizeof(uint16_t));
+		linedef.flags = read2Bytes(buffer, linedefsLump.offset + (2 * sizeof(uint16_t)));
+		linedef.specialType = read2Bytes(buffer, linedefsLump.offset + (3 * sizeof(uint16_t)));
+		linedef.sectorTag = read2Bytes(buffer, linedefsLump.offset + (4 * sizeof(uint16_t)));
+		linedef.rightSidedef = read2Bytes(buffer, linedefsLump.offset + (5 * sizeof(uint16_t)));
+		linedef.leftSidedef = read2Bytes(buffer, linedefsLump.offset + (6 * sizeof(uint16_t)));
+		linedefs.push_back(linedef);
+		linedefsLump.offset += sizeof(Linedef);
+	}
+}
+
 
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)

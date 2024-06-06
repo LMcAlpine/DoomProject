@@ -16,8 +16,19 @@ struct DirectoryEntry
 };
 struct Vertex
 {
-	short x{};
-	short y{};
+	uint16_t x{};
+	uint16_t y{};
+};
+
+struct Linedef
+{
+	uint16_t startVertex{};
+	uint16_t endVertex{};
+	uint16_t flags{};
+	uint16_t specialType{};
+	uint16_t sectorTag{};
+	uint16_t rightSidedef{};
+	int16_t leftSidedef{};
 };
 
 enum LumpsIndex
