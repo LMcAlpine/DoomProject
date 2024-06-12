@@ -166,6 +166,46 @@ void WADReader::readBoundingBox(std::vector<std::byte>& buffer, BoundingBox& bou
 	boundingBox.right = read2Bytes(buffer, offset + 6);
 }
 
+void WADReader::readSidedefs(std::vector<std::byte>& buffer, int index)
+{
+	index += LumpsIndex::sidedefs;
+	DirectoryEntry sidedefsLump = directory.at(index);
+	Sidedef sidedef;
+
+	for (int i = 0; i < sidedefsLump.size / sizeof(Sidedef); i++)
+	{
+		sidedef.xOffset = read2Bytes(buffer, sidedefsLump.offset);
+		sidedef.yOffset = read2Bytes(buffer, sidedefsLump.offset + sizeof(uint16_t));
+		readTextureName(buffer, sidedef.upperTextureName, sidedefsLump.offset + 4);
+		readTextureName(buffer, sidedef.lowerTextureName, sidedefsLump.offset + 12);
+		readTextureName(buffer, sidedef.middleTextureName, sidedefsLump.offset + 20);
+		sidedef.sectorNumber = read2Bytes(buffer, sidedefsLump.offset + 28);
+		sidedefs.push_back(sidedef);
+		sidedefsLump.offset += sizeof(Sidedef);
+
+	}
+}
+
+void WADReader::readTextureName(std::vector<std::byte>& buffer, char name[], int offset)
+{
+	for (int j = 0; j < 8; j++)
+	{
+		name[j] = (char)buffer.at(offset++);
+	}
+}
+
+void WADReader::readSegs(std::vector<std::byte>& buffer, int index)
+{
+}
+
+void WADReader::readSectors(std::vector<std::byte>& buffer, int index)
+{
+}
+
+void WADReader::readSubsectors(std::vector<std::byte>& buffer, int index)
+{
+}
+
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
 {

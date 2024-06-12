@@ -52,6 +52,16 @@ struct Node
 	int16_t leftChild{};
 };
 
+struct Sidedef
+{
+	int16_t xOffset{};
+	int16_t yOffset{};
+	char upperTextureName[8]{};
+	char lowerTextureName[8]{};
+	char middleTextureName[8]{};
+	int16_t sectorNumber{};
+};
+
 
 
 enum LumpsIndex

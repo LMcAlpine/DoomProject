@@ -11,6 +11,7 @@ class WADReader
 	std::vector<Vertex> vertexes{};
 	std::vector<Linedef> linedefs{};
 	std::vector<Node> nodes{};
+	std::vector<Sidedef> sidedefs{};
 public:
 	WADReader();
 
@@ -41,6 +42,16 @@ public:
 	void readNodes(std::vector<std::byte>& buffer, int index);
 
 	void readBoundingBox(std::vector<std::byte>& buffer, BoundingBox& boundingBox, int offset);
+
+	void readSidedefs(std::vector <std::byte>& buffer, int index);
+
+	void readTextureName(std::vector<std::byte>& buffer, char name[], int offset);
+
+	void readSegs(std::vector<std::byte>& buffer, int index);
+
+	void readSectors(std::vector<std::byte>& buffer, int index);
+
+	void readSubsectors(std::vector<std::byte>& buffer, int index);
 
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
