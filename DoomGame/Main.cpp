@@ -18,6 +18,7 @@ int main()
 		int index = wadReader.searchForLump("E1M1");
 		wadReader.readVertexes(buffer, index);
 		wadReader.readLinedefs(buffer, index);
+		wadReader.readNodes(buffer, index);
 		return 0;
 	}
 	catch (const std::runtime_error& e)

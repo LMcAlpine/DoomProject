@@ -136,6 +136,35 @@ void WADReader::readLinedefs(std::vector<std::byte>& buffer, int index)
 	}
 }
 
+void WADReader::readNodes(std::vector<std::byte>& buffer, int index)
+{
+	index += LumpsIndex::nodes;
+	DirectoryEntry nodesLump = directory.at(index);
+	Node node;
+
+	for (int i = 0; i < nodesLump.size / sizeof(Node); i++)
+	{
+		node.x = read2Bytes(buffer, nodesLump.offset);
+		node.y = read2Bytes(buffer, nodesLump.offset + sizeof(uint16_t));
+		node.changeInX = read2Bytes(buffer, nodesLump.offset + (2 * sizeof(uint16_t)));
+		node.changeInY = read2Bytes(buffer, nodesLump.offset + (3 * sizeof(uint16_t)));
+		readBoundingBox(buffer, node.rightBoundingBox, nodesLump.offset + (4 * sizeof(uint16_t)));
+		readBoundingBox(buffer, node.leftBoundingBox, nodesLump.offset + (8 * sizeof(uint16_t)));
+		node.rightChild = read2Bytes(buffer, nodesLump.offset + (12 * sizeof(uint16_t)));
+		node.leftChild = read2Bytes(buffer, nodesLump.offset + (13 * (sizeof(uint16_t))));
+		nodes.push_back(node);
+		nodesLump.offset += sizeof(Node);
+
+	}
+}
+
+void WADReader::readBoundingBox(std::vector<std::byte>& buffer, BoundingBox& boundingBox, int offset)
+{
+	boundingBox.top = read2Bytes(buffer, offset);
+	boundingBox.bottom = read2Bytes(buffer, offset + 2);
+	boundingBox.left = read2Bytes(buffer, offset + 4);
+	boundingBox.right = read2Bytes(buffer, offset + 6);
+}
 
 
 uint16_t WADReader::read2Bytes(std::vector<std::byte>& buffer, int offset)
@@ -158,4 +187,9 @@ uint32_t WADReader::read4Bytes(std::vector<std::byte>& buffer, int offset)
 	uint32_t value;
 	std::memcpy(&value, buffer.data() + offset, sizeof(uint32_t));
 	return value;
+}
+
+std::vector<Node> WADReader::getNodes()
+{
+	return std::vector<Node>();
 }

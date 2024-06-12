@@ -10,6 +10,7 @@ class WADReader
 	std::vector<DirectoryEntry> directory{};
 	std::vector<Vertex> vertexes{};
 	std::vector<Linedef> linedefs{};
+	std::vector<Node> nodes{};
 public:
 	WADReader();
 
@@ -37,9 +38,16 @@ public:
 
 	void readLinedefs(std::vector<std::byte>& buffer, int index);
 
+	void readNodes(std::vector<std::byte>& buffer, int index);
+
+	void readBoundingBox(std::vector<std::byte>& buffer, BoundingBox& boundingBox, int offset);
+
+
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 
 	uint32_t read4Bytes(std::vector<std::byte>& buffer, int offset);
+
+	std::vector<Node> getNodes();
 
 	~WADReader();
 

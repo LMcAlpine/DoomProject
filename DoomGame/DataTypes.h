@@ -31,6 +31,29 @@ struct Linedef
 	int16_t leftSidedef{};
 };
 
+
+struct BoundingBox
+{
+	int16_t top;
+	int16_t bottom;
+	int16_t left;
+	int16_t right;
+};
+
+struct Node
+{
+	int16_t x{};
+	int16_t y{};
+	int16_t changeInX{};
+	int16_t changeInY{};
+	BoundingBox rightBoundingBox{};
+	BoundingBox leftBoundingBox{};
+	int16_t rightChild{};
+	int16_t leftChild{};
+};
+
+
+
 enum LumpsIndex
 {
 	things = 1,
