@@ -31,6 +31,66 @@ struct Linedef
 	int16_t leftSidedef{};
 };
 
+
+struct BoundingBox
+{
+	int16_t top;
+	int16_t bottom;
+	int16_t left;
+	int16_t right;
+};
+
+struct Node
+{
+	int16_t x{};
+	int16_t y{};
+	int16_t changeInX{};
+	int16_t changeInY{};
+	BoundingBox rightBoundingBox{};
+	BoundingBox leftBoundingBox{};
+	int16_t rightChild{};
+	int16_t leftChild{};
+};
+
+struct Sidedef
+{
+	int16_t xOffset{};
+	int16_t yOffset{};
+	char upperTextureName[8]{};
+	char lowerTextureName[8]{};
+	char middleTextureName[8]{};
+	int16_t sectorNumber{};
+};
+
+struct Seg
+{
+	uint16_t startingVertexNumber{};
+	uint16_t endingVertexNumber{};
+	int16_t angle{};
+	uint16_t linedefNumber{};
+	uint16_t direction{};
+	uint16_t offset{};
+};
+
+struct Sector
+{
+	int16_t floorHeight{};
+	int16_t ceilingHeight{};
+	char floorTextureName[8]{};
+	char ceilingTextureName[8]{};
+	uint16_t lightLevel{};
+	uint16_t type{};
+	uint16_t tagNumber{};
+};
+
+struct Subsector
+{
+	uint16_t segCount{};
+	uint16_t firstSegNumber{};
+};
+
+
+
 enum LumpsIndex
 {
 	things = 1,
