@@ -234,6 +234,16 @@ void WADReader::readSectors(std::vector<std::byte>& buffer, int index)
 
 void WADReader::readSubsectors(std::vector<std::byte>& buffer, int index)
 {
+	index += LumpsIndex::ssectors;
+	DirectoryEntry subsectorsLump = directory.at(index);
+	Subsector subsector;
+	for (int i = 0; i < subsectorsLump.size / sizeof(Subsector); i++)
+	{
+		subsector.segCount = read2Bytes(buffer, subsectorsLump.offset);
+		subsector.firstSegNumber = read2Bytes(buffer, subsectorsLump.offset + 2);
+		subsectors.push_back(subsector);
+		subsectorsLump.offset += sizeof(Subsector);
+	}
 }
 
 

@@ -83,6 +83,12 @@ struct Sector
 	uint16_t tagNumber{};
 };
 
+struct Subsector
+{
+	uint16_t segCount{};
+	uint16_t firstSegNumber{};
+};
+
 
 
 enum LumpsIndex
