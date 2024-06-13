@@ -10,36 +10,39 @@
 int main()
 {
 
-	Game game;
-	game.init();
-	while (!game.isOver())
-	{
-		game.processInput();
-		game.update();
-		game.render();
-		game.delay();
-	}
+
 	try
 	{
+
+		Game game;
+		game.init();
+		while (!game.isOver())
+		{
+			game.processInput();
+			game.update();
+			game.render();
+			game.delay();
+		}
+
 		Header header;
 		DirectoryEntry directoryEntry;
 		WADReader wadReader;
-		auto buffer = wadReader.readFileData("./DOOM.WAD");
-		int offset = 0;
-		wadReader.readHeader(buffer, header, offset);
-		wadReader.readDirectory(buffer, header, header.directoryOffset);
+		//auto buffer = wadReader.readFileData("./DOOM.WAD");
+		//int offset = 0;
+		//wadReader.readHeader(buffer, header, offset);
+		//wadReader.readDirectory(buffer, header, header.directoryOffset);
 
 
 
 
-		int index = wadReader.searchForLump("E1M1");
-		wadReader.readVertexes(buffer, index);
-		wadReader.readLinedefs(buffer, index);
-		wadReader.readNodes(buffer, index);
-		wadReader.readSidedefs(buffer, index);
-		wadReader.readSegs(buffer, index);
-		wadReader.readSectors(buffer, index);
-		wadReader.readSubsectors(buffer, index);
+		//int index = wadReader.searchForLump("E1M1");
+		//wadReader.readVertexes(buffer, index);
+		//wadReader.readLinedefs(buffer, index);
+		//wadReader.readNodes(buffer, index);
+		//wadReader.readSidedefs(buffer, index);
+		//wadReader.readSegs(buffer, index);
+		//wadReader.readSectors(buffer, index);
+		//wadReader.readSubsectors(buffer, index);
 		return 0;
 	}
 	catch (const std::runtime_error& e)

@@ -3,23 +3,25 @@
 
 Engine::Engine() : isGameOver(false), renderWidth(320), renderHeight(200)
 {
-    level = new Level("E1M1");
+	level = new Level("E1M1");
 }
 
 Engine::~Engine()
 {
-    delete level;
+	delete level;
 }
 
 bool Engine::init()
 {
-    return true;
+	auto buffer = wadReader.readWAD("./DOOM.WAD");
+	wadReader.readLevelData(buffer, level);
+	return true;
 }
 
 void Engine::render(SDL_Renderer* pRenderer)
 {
-    SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x00);
-    SDL_RenderClear(pRenderer);
+	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x00);
+	SDL_RenderClear(pRenderer);
 }
 
 void Engine::keyPressed(SDL_Event& event)
@@ -32,7 +34,7 @@ void Engine::keyReleased(SDL_Event& event)
 
 void Engine::quit()
 {
-    isGameOver = true;
+	isGameOver = true;
 }
 
 void Engine::update()
@@ -41,30 +43,30 @@ void Engine::update()
 
 bool Engine::isOver()
 {
-    return isGameOver;
+	return isGameOver;
 }
 
 int Engine::getRenderWidth()
 {
-    return renderWidth;
+	return renderWidth;
 }
 
 int Engine::getRenderHeight()
 {
-    return renderHeight;
+	return renderHeight;
 }
 
 int Engine::getTimePerFrame()
 {
-    return 1000 / 60;
+	return 1000 / 60;
 }
 
 std::string Engine::getName()
 {
-    return "MyDoomProject";
+	return "MyDoomProject";
 }
 
 std::string Engine::getWADFileName()
 {
-    return std::string();
+	return std::string();
 }

@@ -5,18 +5,15 @@
 #include <fstream> 
 #include <cstddef>
 #include "DataTypes.h"
+#include "Level.h"
 class WADReader
 {
 	std::vector<DirectoryEntry> directory{};
-	std::vector<Vertex> vertexes{};
-	std::vector<Linedef> linedefs{};
-	std::vector<Node> nodes{};
-	std::vector<Sidedef> sidedefs{};
-	std::vector<Seg> segs{};
-	std::vector<Sector> sectors{};
-	std::vector<Subsector> subsectors{};
+	std::vector<std::byte> buffer{};
+
 public:
 	WADReader();
+	std::vector<std::byte> readWAD(const std::string& name);
 
 	std::vector<std::byte> readFileData(const std::string& name);
 
@@ -38,30 +35,30 @@ public:
 
 	int searchForLump(const std::string& name);
 
-	void readVertexes(std::vector<std::byte>& buffer, int index);
+	void readLevelData(std::vector<std::byte> buffer, Level* level);
 
-	void readLinedefs(std::vector<std::byte>& buffer, int index);
+	void readVertexes(std::vector<std::byte>& buffer, int index, Level* level);
 
-	void readNodes(std::vector<std::byte>& buffer, int index);
+	void readLinedefs(std::vector<std::byte>& buffer, int index, Level* level);
+
+	void readNodes(std::vector<std::byte>& buffer, int index, Level* level);
 
 	void readBoundingBox(std::vector<std::byte>& buffer, BoundingBox& boundingBox, int offset);
 
-	void readSidedefs(std::vector <std::byte>& buffer, int index);
+	void readSidedefs(std::vector <std::byte>& buffer, int index, Level* level);
 
 	void readTextureName(std::vector<std::byte>& buffer, char name[], int offset);
 
-	void readSegs(std::vector<std::byte>& buffer, int index);
+	void readSegs(std::vector<std::byte>& buffer, int index, Level* level);
 
-	void readSectors(std::vector<std::byte>& buffer, int index);
+	void readSectors(std::vector<std::byte>& buffer, int index, Level* level);
 
-	void readSubsectors(std::vector<std::byte>& buffer, int index);
+	void readSubsectors(std::vector<std::byte>& buffer, int index, Level* level);
 
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 
 	uint32_t read4Bytes(std::vector<std::byte>& buffer, int offset);
-
-	std::vector<Node> getNodes();
 
 	~WADReader();
 
