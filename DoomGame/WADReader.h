@@ -12,6 +12,7 @@ class WADReader
 	std::vector<Linedef> linedefs{};
 	std::vector<Node> nodes{};
 	std::vector<Sidedef> sidedefs{};
+	std::vector<Seg> segs{};
 public:
 	WADReader();
 

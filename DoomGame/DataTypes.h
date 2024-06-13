@@ -62,6 +62,16 @@ struct Sidedef
 	int16_t sectorNumber{};
 };
 
+struct Seg
+{
+	uint16_t startingVertexNumber{};
+	uint16_t endingVertexNumber{};
+	int16_t angle{};
+	uint16_t linedefNumber{};
+	uint16_t direction{};
+	uint16_t offset{};
+};
+
 
 
 enum LumpsIndex

@@ -196,6 +196,20 @@ void WADReader::readTextureName(std::vector<std::byte>& buffer, char name[], int
 
 void WADReader::readSegs(std::vector<std::byte>& buffer, int index)
 {
+	index += LumpsIndex::segs;
+	DirectoryEntry segsLump = directory.at(index);
+	Seg seg;
+	for (int i = 0; i < segsLump.size / sizeof(Seg); i++)
+	{
+		seg.startingVertexNumber = read2Bytes(buffer, segsLump.offset);
+		seg.endingVertexNumber = read2Bytes(buffer, segsLump.offset + 2);
+		seg.angle = read2Bytes(buffer, segsLump.offset + 4);
+		seg.linedefNumber = read2Bytes(buffer, segsLump.offset + 6);
+		seg.direction = read2Bytes(buffer, segsLump.offset + 8);
+		seg.offset = read2Bytes(buffer, segsLump.offset + 10);
+		segs.push_back(seg);
+		segsLump.offset += sizeof(Seg);
+	}
 }
 
 void WADReader::readSectors(std::vector<std::byte>& buffer, int index)
