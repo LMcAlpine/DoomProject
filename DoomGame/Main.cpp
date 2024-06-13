@@ -21,6 +21,7 @@ int main()
 		wadReader.readNodes(buffer, index);
 		wadReader.readSidedefs(buffer, index);
 		wadReader.readSegs(buffer, index);
+		wadReader.readSectors(buffer, index);
 		return 0;
 	}
 	catch (const std::runtime_error& e)

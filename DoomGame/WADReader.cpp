@@ -214,6 +214,22 @@ void WADReader::readSegs(std::vector<std::byte>& buffer, int index)
 
 void WADReader::readSectors(std::vector<std::byte>& buffer, int index)
 {
+	index += LumpsIndex::sectors;
+	DirectoryEntry sectorsLump = directory.at(index);
+	Sector sector;
+	for (int i = 0; i < sectorsLump.size / sizeof(Sector); i++)
+	{
+		sector.floorHeight = read2Bytes(buffer, sectorsLump.offset);
+		sector.ceilingHeight = read2Bytes(buffer, sectorsLump.offset + 2);
+		readTextureName(buffer, sector.floorTextureName, sectorsLump.offset + 4);
+		readTextureName(buffer, sector.ceilingTextureName, sectorsLump.offset + 12);
+		sector.lightLevel = read2Bytes(buffer, sectorsLump.offset + 20);
+		sector.type = read2Bytes(buffer, sectorsLump.offset + 22);
+		sector.tagNumber = read2Bytes(buffer, sectorsLump.offset + 24);
+		sectors.push_back(sector);
+		sectorsLump.offset += sizeof(Sector);
+
+	}
 }
 
 void WADReader::readSubsectors(std::vector<std::byte>& buffer, int index)

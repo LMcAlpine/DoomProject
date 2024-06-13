@@ -72,6 +72,17 @@ struct Seg
 	uint16_t offset{};
 };
 
+struct Sector
+{
+	int16_t floorHeight{};
+	int16_t ceilingHeight{};
+	char floorTextureName[8]{};
+	char ceilingTextureName[8]{};
+	uint16_t lightLevel{};
+	uint16_t type{};
+	uint16_t tagNumber{};
+};
+
 
 
 enum LumpsIndex
