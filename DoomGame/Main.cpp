@@ -1,11 +1,24 @@
 // main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 #include <iostream>
 #include "WADReader.h"
+#include "Game.h"
+
 
 int main()
 {
+
+	Game game;
+	game.init();
+	while (!game.isOver())
+	{
+		game.processInput();
+		game.update();
+		game.render();
+		game.delay();
+	}
 	try
 	{
 		Header header;
@@ -15,6 +28,10 @@ int main()
 		int offset = 0;
 		wadReader.readHeader(buffer, header, offset);
 		wadReader.readDirectory(buffer, header, header.directoryOffset);
+
+
+
+
 		int index = wadReader.searchForLump("E1M1");
 		wadReader.readVertexes(buffer, index);
 		wadReader.readLinedefs(buffer, index);
