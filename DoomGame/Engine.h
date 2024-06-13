@@ -10,14 +10,14 @@ public:
 	Engine();
 	~Engine();
 
-	virtual void render(SDL_Renderer* pRenderer); // Draw something to show on screen
-	virtual void keyPressed(SDL_Event& event); // Which keys are pressed?
-	virtual void keyReleased(SDL_Event& event); // Which keys are released?
-	virtual void quit(); // Close and shutdown the game
+	virtual void render(SDL_Renderer* pRenderer);
+	virtual void keyPressed(SDL_Event& event);
+	virtual void keyReleased(SDL_Event& event);
+	virtual void quit();
 	virtual void update();
 
-	virtual bool isOver(); // Did the game end?
-	virtual bool init(); // Initialize game object
+	virtual bool isOver();
+	virtual bool init();
 
 	virtual int getRenderWidth();
 	virtual int getRenderHeight();
@@ -27,13 +27,13 @@ public:
 	virtual std::string getWADFileName();
 
 protected:
-	int renderWidth;
-	int renderHeight;
+	int renderWidth{};
+	int renderHeight{};
 
-	bool isGameOver;
+	bool isGameOver{};
 
-	WADReader wadReader;
-	Level* level;
+	WADReader wadReader{};
+	Level* level{};
 
 };
 
