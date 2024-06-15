@@ -1,12 +1,8 @@
-// main.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
 #include <iostream>
 #include "Game.h"
 
 
-int main()
+int main(int argc, char* args[])
 {
 	try
 	{
