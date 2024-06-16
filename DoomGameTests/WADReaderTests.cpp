@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "../DoomGame/Level.h"
+#include "../DoomGame/Level.cpp"
 #include "../DoomGame/WADReader.h"
 #include "../DoomGame/WADReader.cpp"
 #include "../DoomGame/DataTypes.h"
