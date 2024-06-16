@@ -4,6 +4,7 @@
 #include <string>
 
 #include "DataTypes.h"
+#include <SDL.h>
 class Level
 {
 public:
@@ -12,12 +13,15 @@ public:
 
 	std::string getName() const;
 	void addVertex(const Vertex& vertex);
+	void compareNumbers(int& max, int& min, int16_t num);
 	void addLinedef(const Linedef& linedef);
 	void addNode(const Node& node);
 	void addSidedef(const Sidedef& sidedef);
 	void addSeg(const Seg& seg);
 	void addSector(const Sector& sector);
 	void addSubsector(const Subsector& subsector);
+
+	void renderAutoMap(SDL_Renderer* pRenderer);
 
 
 
@@ -30,5 +34,11 @@ protected:
 	std::vector<Seg> segs{};
 	std::vector<Sector> sectors{};
 	std::vector<Subsector> subsectors{};
+
+	int xMin;
+	int xMax;
+	int yMin;
+	int yMax;
+	int autoMapScaleFactor;
 };
 
