@@ -118,7 +118,7 @@ int WADReader::searchForLump(const std::string& name)
 
 void WADReader::readLevelData(std::vector<std::byte> buffer, Level* level)
 {
-	int index = searchForLump("E1M1");
+	int index = searchForLump(level->getName());
 	readVertexes(buffer, index, level);
 	readLinedefs(buffer, index, level);
 	readNodes(buffer, index, level);
