@@ -1,24 +1,29 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
     - name: Set up dependencies
-      run: sudo apt-get install -y cmake g++ libpthread-stubs0-dev
+      run: sudo apt-get install -y cmake g++ libsdl2-dev libpthread-stubs0-dev
 
     - name: Build project
       run: |
         mkdir -p build
         cd build
         cmake ..
-        make
+        cmake --build .
 
     - name: Run tests
       run: |
