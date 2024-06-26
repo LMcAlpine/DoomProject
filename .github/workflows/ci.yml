@@ -21,6 +21,15 @@ jobs:
     - name: Set up dependencies
       run: sudo apt-get install -y cmake g++ libsdl2-dev libpthread-stubs0-dev
 
+    - name: Download Doom shareware WAD
+      run: wget -O shareware_doom_iwad.zip http://www.doomworld.com/3ddownloads/ports/shareware_doom_iwad.zip
+
+    - name: Extract Doom shareware WAD
+      run: unzip shareware_doom_iwad.zip -d .
+
+    - name: Move WAD files to correct directory
+      run: mv DOOM1.WAD DoomGame/
+      
     - name: Build project
       run: |
         mkdir -p build
