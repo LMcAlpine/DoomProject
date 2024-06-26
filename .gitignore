@@ -368,3 +368,25 @@ FodyWeavers.xsd
 
 # Ignore PWAD file
 /DoomGame/mytestmap.wad
+
+
+
+## Linux Specific
+
+# CMake files
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+
+# Compiled source files
+*.o
+*.so
+*.a
+
+# Build directories
+build/
+
+
+DOOM.WAD
+mytestmap.wad

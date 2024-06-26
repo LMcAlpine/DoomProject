@@ -1,4 +1,6 @@
 #include "WADReader.h"
+#include <cstring>
+
 
 WADReader::WADReader() {}
 

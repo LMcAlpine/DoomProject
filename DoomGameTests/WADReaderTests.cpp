@@ -13,27 +13,27 @@ protected:
 	int offset = 0;
 };
 
-static TEST_F(WADReaderTests, HandleNonExistentFile)
+TEST_F(WADReaderTests, HandleNonExistentFile)
 {
 	std::string path = "./FAKE.WAD";
 	EXPECT_THROW(wadReader.readFileData(path), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleHeaderID)
+TEST_F(WADReaderTests, HandleHeaderID)
 {
 	auto buffer = wadReader.readFileData("./DOOM.WAD");
 	wadReader.extractID(buffer, header, offset);
 	ASSERT_EQ(std::string(header.WADType), "IWAD");
 }
 
-static TEST_F(WADReaderTests, HandleHeaderIDPWAD)
+TEST_F(WADReaderTests, HandleHeaderIDPWAD)
 {
 	auto buffer = wadReader.readFileData("./mytestmap.wad");
 	wadReader.extractID(buffer, header, offset);
 	ASSERT_EQ(std::string(header.WADType), "PWAD");
 }
 
-static TEST_F(WADReaderTests, HandleTotalLumps)
+TEST_F(WADReaderTests, HandleTotalLumps)
 {
 	auto buffer = wadReader.readFileData("./DOOM.WAD");
 	offset += 4;
@@ -41,7 +41,7 @@ static TEST_F(WADReaderTests, HandleTotalLumps)
 	ASSERT_EQ(header.numDirectories, 2306);
 }
 
-static TEST_F(WADReaderTests, HandleRead2Bytes)
+TEST_F(WADReaderTests, HandleRead2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
 
@@ -60,32 +60,32 @@ static TEST_F(WADReaderTests, HandleRead2Bytes)
 	ASSERT_EQ(wadReader.read2Bytes(buffer, 4), 0x0605);
 }
 
-static TEST_F(WADReaderTests, HandleReadOutOfBounds2Bytes)
+TEST_F(WADReaderTests, HandleReadOutOfBounds2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01} };
 	EXPECT_THROW(wadReader.read2Bytes(buffer, 0), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleOffsetOutOfBounds2Bytes)
+TEST_F(WADReaderTests, HandleOffsetOutOfBounds2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
 	EXPECT_THROW(wadReader.read2Bytes(buffer, -1), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleOffsetOutOfBoundsGreater2Bytes)
+TEST_F(WADReaderTests, HandleOffsetOutOfBoundsGreater2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03} };
 	EXPECT_THROW(wadReader.read2Bytes(buffer, 4), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleOutOfBoundsEqual2Bytes)
+TEST_F(WADReaderTests, HandleOutOfBoundsEqual2Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02} };
 	ASSERT_EQ(wadReader.read2Bytes(buffer, 0), 0x0201);
 }
 
 
-static TEST_F(WADReaderTests, HandleRead4Bytes)
+TEST_F(WADReaderTests, HandleRead4Bytes)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
 
@@ -99,25 +99,25 @@ static TEST_F(WADReaderTests, HandleRead4Bytes)
 	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 0x04030201);
 }
 
-static TEST_F(WADReaderTests, HandleReadOutOfBounds)
+TEST_F(WADReaderTests, HandleReadOutOfBounds)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02} };
 	EXPECT_THROW(wadReader.read4Bytes(buffer, 0), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleOffsetOutOfBounds)
+TEST_F(WADReaderTests, HandleOffsetOutOfBounds)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
 	EXPECT_THROW(wadReader.read4Bytes(buffer, -1), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleOffsetOutOfBoundsGreater)
+TEST_F(WADReaderTests, HandleOffsetOutOfBoundsGreater)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04}, std::byte{0x05}, std::byte{0x06} };
 	EXPECT_THROW(wadReader.read4Bytes(buffer, 7), std::runtime_error);
 }
 
-static TEST_F(WADReaderTests, HandleOutOfBoundsEqual)
+TEST_F(WADReaderTests, HandleOutOfBoundsEqual)
 {
 	std::vector<std::byte> buffer = { std::byte{0x01}, std::byte{0x02}, std::byte{0x03}, std::byte{0x04} };
 	ASSERT_EQ(wadReader.read4Bytes(buffer, 0), 0x04030201);

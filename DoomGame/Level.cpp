@@ -1,4 +1,5 @@
 #include "Level.h"
+#include <climits>
 
 Level::Level(std::string name) : name(name), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
 {
