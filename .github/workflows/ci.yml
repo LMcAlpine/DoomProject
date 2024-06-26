@@ -15,6 +15,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    with:
+          submodules: true
 
     - name: Set up dependencies
       run: sudo apt-get install -y cmake g++ libsdl2-dev libpthread-stubs0-dev
