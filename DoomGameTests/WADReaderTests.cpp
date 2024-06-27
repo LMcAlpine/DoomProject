@@ -43,7 +43,7 @@ TEST_F(WADReaderTests, HandleHeaderID)
 	}
 	else
 	{
-		SUCCEED();
+		GTEST_SKIP() << "DOOM_WAD_PATH not set, skipping test.";
 	}
 }
 
@@ -57,7 +57,7 @@ TEST_F(WADReaderTests, HandleHeaderIDPWAD)
 	}
 	else
 	{
-		SUCCEED();
+		GTEST_SKIP() << "MYTESTMAP_WAD_PATH not set, skipping test.";
 	}
 }
 
@@ -72,7 +72,7 @@ TEST_F(WADReaderTests, HandleTotalLumps)
 	}
 	else
 	{
-		SUCCEED();
+		GTEST_SKIP() << "DOOM_WAD_PATH not set, skipping test.";
 	}
 }
 

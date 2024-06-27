@@ -27,11 +27,11 @@ jobs:
     - name: Extract Doom shareware WAD
       run: unzip shareware_doom_iwad.zip -d .
 
-    - name: Move WAD files to correct directory
-      run: mv DOOM1.WAD DoomGame/
+ - name: Move WAD files to correct directory
+      run: mv DOOM1.WAD DoomGame/DOOM1.WAD
 
-    - name: Set WAD_PATH environment variable
-      run: echo "WAD_PATH=$GITHUB_WORKSPACE/DoomGame" >> $GITHUB_ENV
+    - name: Set environment variables
+      run: echo "DOOM_WAD_PATH=$GITHUB_WORKSPACE/DoomGame/DOOM1.WAD" >> $GITHUB_ENV
 
 
     - name: Build project

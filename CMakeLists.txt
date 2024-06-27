@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(DoomProject)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_BUILD_TYPE Debug)
+
 
 # Find SDL2
 find_package(SDL2 REQUIRED)
