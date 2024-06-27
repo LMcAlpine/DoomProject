@@ -92,6 +92,43 @@ void Level::renderAutoMap(SDL_Renderer* pRenderer)
 	}
 }
 
+void Level::renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum)
+{
+	int16_t i = bspNum & 0x8000;
+	if (bspNum & 0x8000)
+	{
+		int16_t r = bspNum & (~0x8000);
+		int r2 = r;
+	}
+
+	bool onLeft = leftSide(-1058, -3554, bspNum);
+
+	Node bsp;
+	bsp = nodes.at(bspNum);
+	if (onLeft)
+	{
+		renderBSPNode(pRenderer, bsp.leftChild);
+	}
+	else
+	{
+		renderBSPNode(pRenderer, bsp.rightChild);
+	}
+
+
+}
+
+bool Level::leftSide(int x, int y, int16_t nodeID)
+{
+	int dx = x - nodes.at(nodeID).changeInX;
+	int dy = y - nodes.at(nodeID).changeInY;
+	return (((dx * nodes.at(nodeID).changeInY) - (dy * nodes.at(nodeID).changeInX)) <= 0);
+}
+
+std::vector<Node> Level::getNodes()
+{
+	return nodes;
+}
+
 std::string Level::getName() const
 {
 	return name;

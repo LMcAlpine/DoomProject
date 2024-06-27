@@ -22,6 +22,11 @@ public:
 	void addSubsector(const Subsector& subsector);
 
 	void renderAutoMap(SDL_Renderer* pRenderer);
+	void renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum);
+
+	bool leftSide(int x, int y, int16_t nodeID);
+
+	std::vector<Node> getNodes();
 
 
 

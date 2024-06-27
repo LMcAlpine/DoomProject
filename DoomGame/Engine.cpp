@@ -23,6 +23,7 @@ void Engine::render(SDL_Renderer* pRenderer)
 	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(pRenderer);
 	level->renderAutoMap(pRenderer);
+	level->renderBSPNode(pRenderer, level->getNodes().size()-1);
 }
 
 void Engine::keyPressed(SDL_Event& event)
