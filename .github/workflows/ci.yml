@@ -27,7 +27,7 @@ jobs:
     - name: Extract Doom shareware WAD
       run: unzip shareware_doom_iwad.zip -d .
 
- - name: Move WAD files to correct directory
+    - name: Move WAD files to correct directory
       run: mv DOOM1.WAD DoomGame/DOOM1.WAD
 
     - name: Set environment variables
