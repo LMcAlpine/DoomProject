@@ -24,6 +24,15 @@ make
 cp ../DOOM.WAD .
 cp ../mytestmap.wad .
 
+# Set environment variables
+export DOOM_WAD_PATH="$(pwd)/DOOM.WAD"
+export MYTESTMAP_WAD_PATH="$(pwd)/mytestmap.wad"
+
+
+echo "DOOM_WAD_PATH is set to $DOOM_WAD_PATH"
+echo "MYTESTMAP_WAD_PATH is set to $MYTESTMAP_WAD_PATH"
+
+
 
 # Run tests
 ctest

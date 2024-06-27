@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <cstdlib> 
 #include "../DoomGame/Level.h"
 #include "../DoomGame/Level.cpp"
 #include "../DoomGame/WADReader.h"
@@ -13,6 +14,15 @@ protected:
 	int offset = 0;
 };
 
+std::string getWadFilePath(const std::string& envVar) {
+    const char* wadPath = std::getenv(envVar.c_str());
+    if (wadPath) {
+        return std::string(wadPath);
+    } else {
+        throw std::runtime_error("Environment variable " + envVar + " is not set");
+    }
+}
+
 TEST_F(WADReaderTests, HandleNonExistentFile)
 {
 	std::string path = "./FAKE.WAD";
@@ -21,21 +31,21 @@ TEST_F(WADReaderTests, HandleNonExistentFile)
 
 TEST_F(WADReaderTests, HandleHeaderID)
 {
-	auto buffer = wadReader.readFileData("./DOOM.WAD");
+	auto buffer = wadReader.readFileData(getWadFilePath("DOOM_WAD_PATH"));
 	wadReader.extractID(buffer, header, offset);
 	ASSERT_EQ(std::string(header.WADType), "IWAD");
 }
 
 TEST_F(WADReaderTests, HandleHeaderIDPWAD)
 {
-	auto buffer = wadReader.readFileData("./mytestmap.wad");
+	auto buffer = wadReader.readFileData(getWadFilePath("MYTESTMAP_WAD_PATH"));
 	wadReader.extractID(buffer, header, offset);
 	ASSERT_EQ(std::string(header.WADType), "PWAD");
 }
 
 TEST_F(WADReaderTests, HandleTotalLumps)
 {
-	auto buffer = wadReader.readFileData("./DOOM.WAD");
+	auto buffer = wadReader.readFileData(getWadFilePath("DOOM_WAD_PATH"));
 	offset += 4;
 	wadReader.extractNumDirectories(buffer, header, offset);
 	ASSERT_EQ(header.numDirectories, 2306);

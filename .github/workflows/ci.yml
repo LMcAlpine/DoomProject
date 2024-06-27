@@ -29,7 +29,11 @@ jobs:
 
     - name: Move WAD files to correct directory
       run: mv DOOM1.WAD DoomGame/
-      
+
+    - name: Set WAD_PATH environment variable
+      run: echo "WAD_PATH=$GITHUB_WORKSPACE/DoomGame" >> $GITHUB_ENV
+
+
     - name: Build project
       run: |
         mkdir -p build
@@ -41,3 +45,5 @@ jobs:
       run: |
         cd build
         ctest --output-on-failure
+      env:
+        WAD_PATH: ${{ env.WAD_PATH }}
