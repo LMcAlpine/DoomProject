@@ -33,6 +33,10 @@ jobs:
     - name: Set environment variables
       run: echo "DOOM_WAD_PATH=$GITHUB_WORKSPACE/DoomGame/DOOM1.WAD" >> $GITHUB_ENV
 
+    - name: Verify WAD_PATH
+      run: echo "DOOM_WAD_PATH is set to $DOOM_WAD_PATH"
+
+
 
     - name: Build project
       run: |
