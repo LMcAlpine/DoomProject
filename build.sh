@@ -12,6 +12,7 @@ if [ -d "$BUILD_DIR" ]; then
 fi
 
 # Create a new build directory
+echo "Creating new build directory..."
 mkdir "$BUILD_DIR"
 cd "$BUILD_DIR"
 
@@ -27,11 +28,12 @@ cp ../mytestmap.wad .
 # Set environment variables
 export DOOM_WAD_PATH="$(pwd)/DOOM.WAD"
 export MYTESTMAP_WAD_PATH="$(pwd)/mytestmap.wad"
+export TEST_ENV="local"
 
 
 echo "DOOM_WAD_PATH is set to $DOOM_WAD_PATH"
 echo "MYTESTMAP_WAD_PATH is set to $MYTESTMAP_WAD_PATH"
-
+echo "TEST_ENV is set to $TEST_ENV"
 
 
 # Run tests
