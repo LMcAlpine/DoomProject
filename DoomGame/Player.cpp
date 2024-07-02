@@ -1,9 +1,5 @@
 #include "Player.h"
 
-//Player::Player(int id, int16_t xPosition, int16_t yPosition, int16_t angle) : playerID(id), xPosition(xPosition), yPosition(yPosition), angle(angle)
-//{
-//
-//}
 Player::Player(int id) : playerID(id)
 {
 
@@ -17,7 +13,7 @@ Player::~Player()
 
 void Player::update()
 {
-	
+
 }
 
 void Player::setXPosition(int16_t xPosition)

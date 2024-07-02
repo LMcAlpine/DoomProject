@@ -71,7 +71,7 @@ void Level::addThing(const Thing& thing)
 	things.push_back(thing);
 }
 
-void Level::renderAutoMap(SDL_Renderer* pRenderer)
+void Level::renderAutoMap()
 {
 	int xShift = -xMin;
 	int yShift = -yMin;
@@ -79,18 +79,18 @@ void Level::renderAutoMap(SDL_Renderer* pRenderer)
 	int renderXSize;
 	int renderYSize;
 
-	SDL_RenderGetLogicalSize(pRenderer, &renderXSize, &renderYSize);
+	SDL_RenderGetLogicalSize(renderer, &renderXSize, &renderYSize);
 
 	--renderXSize;
 	--renderYSize;
 
-	SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	for (Linedef& linedef : linedefs)
 	{
 		Vertex vertexStart = vertexes.at(linedef.startVertex);
 		Vertex vertexEnd = vertexes.at(linedef.endVertex);
 
-		SDL_RenderDrawLine(pRenderer,
+		SDL_RenderDrawLine(renderer,
 			(vertexStart.x + xShift) / autoMapScaleFactor,
 			renderYSize - (vertexStart.y + yShift) / autoMapScaleFactor,
 			(vertexEnd.x + xShift) / autoMapScaleFactor,
@@ -98,26 +98,27 @@ void Level::renderAutoMap(SDL_Renderer* pRenderer)
 	}
 }
 
-void Level::renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum, int x, int y)
+void Level::renderBSPNode(int16_t bspNum)
 {
 	int16_t i = bspNum & 0x8000;
 	if (bspNum & 0x8000)
 	{
 		int16_t r = bspNum & (~0x8000);
 		int r2 = r;
+		renderSubsector(bspNum & (~0x8000));
 	}
 
-	bool onLeft = leftSide(x, y, bspNum);
+	bool onLeft = leftSide(player->getXPosition(), player->getYPosition(), bspNum);
 
 	Node bsp;
 	bsp = nodes.at(bspNum);
 	if (onLeft)
 	{
-		renderBSPNode(pRenderer, bsp.leftChild, x, y);
+		renderBSPNode(bsp.leftChild);
 	}
 	else
 	{
-		renderBSPNode(pRenderer, bsp.rightChild, x, y);
+		renderBSPNode(bsp.rightChild);
 	}
 
 
@@ -128,6 +129,10 @@ bool Level::leftSide(int x, int y, int16_t nodeID)
 	int dx = x - nodes.at(nodeID).changeInX;
 	int dy = y - nodes.at(nodeID).changeInY;
 	return (((dx * nodes.at(nodeID).changeInY) - (dy * nodes.at(nodeID).changeInX)) <= 0);
+}
+
+void Level::renderSubsector(int16_t subsectorID)
+{
 }
 
 std::vector<Node> Level::getNodes()

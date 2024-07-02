@@ -20,10 +20,9 @@ bool Engine::init()
 	auto buffer = wadReader.readWAD("./DOOM.WAD");
 	wadReader.readLevelData(buffer, level);
 	Thing thing = level->getThings();
-	//player = new Player(0, thing.xPosition, thing.yPosition, thing.angle);
-	//player->setXPosition(thing.xPosition);
-	//player->setYPosition(thing.yPosition);
-	//player->setAngle(thing.angle);
+	player->setXPosition(thing.xPosition);
+	player->setYPosition(thing.yPosition);
+	player->setAngle(thing.angle);
 	return true;
 }
 
@@ -31,8 +30,8 @@ void Engine::render()
 {
 	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(renderer);
-	level->renderAutoMap(renderer);
-	//level->renderBSPNode(renderer, level->getNodes().size() - 1, player->getXPosition(), player->getYPosition());
+	level->renderAutoMap();
+	level->renderBSPNode(level->getNodes().size() - 1);
 }
 
 void Engine::keyPressed(SDL_Event& event)

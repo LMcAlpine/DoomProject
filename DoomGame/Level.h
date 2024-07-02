@@ -24,11 +24,11 @@ public:
 
 	void addThing(const Thing& thing);
 
-	void renderAutoMap(SDL_Renderer* pRenderer);
-	void renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum, int x, int y);
+	void renderAutoMap();
+	void renderBSPNode(int16_t bspNum);
 
 	bool leftSide(int x, int y, int16_t nodeID);
-
+	void renderSubsector(int16_t subsectorID);
 	std::vector<Node> getNodes();
 	Thing getThings();
 
