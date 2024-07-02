@@ -1,9 +1,10 @@
 #include "Level.h"
 
-Level::Level(std::string name) : name(name), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
+Level::Level(std::string name, SDL_Renderer* renderer, Player* player) : name(name), renderer(renderer), player(player), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
 {
 
 }
+
 
 Level::~Level()
 {
@@ -116,7 +117,7 @@ void Level::renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum, int x, int y)
 	}
 	else
 	{
-		renderBSPNode(pRenderer, bsp.rightChild,x,y);
+		renderBSPNode(pRenderer, bsp.rightChild, x, y);
 	}
 
 

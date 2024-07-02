@@ -8,10 +8,10 @@
 class Engine
 {
 public:
-	Engine();
+	Engine(SDL_Renderer* renderer);
 	~Engine();
 
-	virtual void render(SDL_Renderer* pRenderer);
+	virtual void render();
 	virtual void keyPressed(SDL_Event& event);
 	virtual void keyReleased(SDL_Event& event);
 	virtual void quit();
@@ -33,6 +33,7 @@ protected:
 
 	bool isGameOver{};
 
+	SDL_Renderer* renderer{};
 	WADReader wadReader{};
 	Level* level{};
 	Player* player{};

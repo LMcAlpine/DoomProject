@@ -1,9 +1,9 @@
 // Engine.cpp
 #include "Engine.h"
 
-Engine::Engine() : isGameOver(false), renderWidth(320), renderHeight(200)
+Engine::Engine(SDL_Renderer* renderer) : renderer(renderer), isGameOver(false), renderWidth(320), renderHeight(200)
 {
-	level = new Level("E1M1");
+
 
 }
 
@@ -15,22 +15,24 @@ Engine::~Engine()
 
 bool Engine::init()
 {
+	player = new Player(0);
+	level = new Level("E1M1", renderer, player);
 	auto buffer = wadReader.readWAD("./DOOM.WAD");
 	wadReader.readLevelData(buffer, level);
 	Thing thing = level->getThings();
-	player = new Player(0);
-	player->setXPosition(thing.xPosition);
-	player->setYPosition(thing.yPosition);
-	player->setAngle(thing.angle);
+	//player = new Player(0, thing.xPosition, thing.yPosition, thing.angle);
+	//player->setXPosition(thing.xPosition);
+	//player->setYPosition(thing.yPosition);
+	//player->setAngle(thing.angle);
 	return true;
 }
 
-void Engine::render(SDL_Renderer* pRenderer)
+void Engine::render()
 {
-	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x00);
-	SDL_RenderClear(pRenderer);
-	level->renderAutoMap(pRenderer);
-	level->renderBSPNode(pRenderer, level->getNodes().size()-1,player->getXPosition(),player->getYPosition());
+	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+	SDL_RenderClear(renderer);
+	level->renderAutoMap(renderer);
+	//level->renderBSPNode(renderer, level->getNodes().size() - 1, player->getXPosition(), player->getYPosition());
 }
 
 void Engine::keyPressed(SDL_Event& event)
@@ -48,6 +50,8 @@ void Engine::quit()
 
 void Engine::update()
 {
+	//player->update();
+
 }
 
 bool Engine::isOver()
