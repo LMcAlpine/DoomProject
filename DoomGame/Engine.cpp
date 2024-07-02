@@ -4,17 +4,24 @@
 Engine::Engine() : isGameOver(false), renderWidth(320), renderHeight(200)
 {
 	level = new Level("E1M1");
+
 }
 
 Engine::~Engine()
 {
 	delete level;
+	delete player;
 }
 
 bool Engine::init()
 {
 	auto buffer = wadReader.readWAD("./DOOM.WAD");
 	wadReader.readLevelData(buffer, level);
+	Thing thing = level->getThings();
+	player = new Player(0);
+	player->setXPosition(thing.xPosition);
+	player->setYPosition(thing.yPosition);
+	player->setAngle(thing.angle);
 	return true;
 }
 
@@ -23,7 +30,7 @@ void Engine::render(SDL_Renderer* pRenderer)
 	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(pRenderer);
 	level->renderAutoMap(pRenderer);
-	level->renderBSPNode(pRenderer, level->getNodes().size()-1);
+	level->renderBSPNode(pRenderer, level->getNodes().size()-1,player->getXPosition(),player->getYPosition());
 }
 
 void Engine::keyPressed(SDL_Event& event)

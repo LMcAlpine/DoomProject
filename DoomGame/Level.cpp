@@ -65,6 +65,11 @@ void Level::addSubsector(const Subsector& subsector)
 	subsectors.push_back(subsector);
 }
 
+void Level::addThing(const Thing& thing)
+{
+	things.push_back(thing);
+}
+
 void Level::renderAutoMap(SDL_Renderer* pRenderer)
 {
 	int xShift = -xMin;
@@ -92,7 +97,7 @@ void Level::renderAutoMap(SDL_Renderer* pRenderer)
 	}
 }
 
-void Level::renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum)
+void Level::renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum, int x, int y)
 {
 	int16_t i = bspNum & 0x8000;
 	if (bspNum & 0x8000)
@@ -101,17 +106,17 @@ void Level::renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum)
 		int r2 = r;
 	}
 
-	bool onLeft = leftSide(-1058, -3554, bspNum);
+	bool onLeft = leftSide(x, y, bspNum);
 
 	Node bsp;
 	bsp = nodes.at(bspNum);
 	if (onLeft)
 	{
-		renderBSPNode(pRenderer, bsp.leftChild);
+		renderBSPNode(pRenderer, bsp.leftChild, x, y);
 	}
 	else
 	{
-		renderBSPNode(pRenderer, bsp.rightChild);
+		renderBSPNode(pRenderer, bsp.rightChild,x,y);
 	}
 
 
@@ -127,6 +132,11 @@ bool Level::leftSide(int x, int y, int16_t nodeID)
 std::vector<Node> Level::getNodes()
 {
 	return nodes;
+}
+
+Thing Level::getThings()
+{
+	return things.at(0);
 }
 
 std::string Level::getName() const

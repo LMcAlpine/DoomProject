@@ -51,7 +51,7 @@ void WADReader::readHeader(std::vector<std::byte>& buffer, Header& header, int& 
 void WADReader::readDirectory(std::vector<std::byte>& buffer, Header& header, uint32_t& offset)
 {
 	DirectoryEntry de;
-	for (int i = 0; i < header.numDirectories; i++)
+	for (size_t i = 0; i < header.numDirectories; i++)
 	{
 		readLumpOffset(buffer, de, offset);
 		readLumpSize(buffer, de, offset);
@@ -126,6 +126,7 @@ void WADReader::readLevelData(std::vector<std::byte> buffer, Level* level)
 	readSegs(buffer, index, level);
 	readSectors(buffer, index, level);
 	readSubsectors(buffer, index, level);
+	readThings(buffer, index, level);
 }
 
 void WADReader::readVertexes(std::vector<std::byte>& buffer, int index, Level* level)
@@ -268,6 +269,24 @@ void WADReader::readSubsectors(std::vector<std::byte>& buffer, int index, Level*
 		subsector.firstSegNumber = read2Bytes(buffer, subsectorsLump.offset + 2);
 		level->addSubsector(subsector);
 		subsectorsLump.offset += sizeof(Subsector);
+	}
+}
+
+void WADReader::readThings(std::vector<std::byte>& buffer, int index, Level* level)
+{
+	index += LumpsIndex::things;
+	DirectoryEntry thingsLump = directory.at(index);
+	Thing thing;
+	for (int i = 0; i < thingsLump.size / sizeof(Thing); i++)
+	{
+		thing.xPosition = read2Bytes(buffer, thingsLump.offset);
+		thing.yPosition = read2Bytes(buffer, thingsLump.offset + 2);
+		thing.angle = read2Bytes(buffer, thingsLump.offset + 4);
+		thing.thingType = read2Bytes(buffer, thingsLump.offset + 6);
+		thing.flags = read2Bytes(buffer, thingsLump.offset + 8);
+		level->addThing(thing);
+		thingsLump.offset += sizeof(Thing);
+
 	}
 }
 

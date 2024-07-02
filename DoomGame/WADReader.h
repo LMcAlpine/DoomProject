@@ -55,6 +55,8 @@ public:
 
 	void readSubsectors(std::vector<std::byte>& buffer, int index, Level* level);
 
+	void readThings(std::vector<std::byte>& buffer, int index, Level* level);
+
 
 	uint16_t read2Bytes(std::vector<std::byte>& buffer, int offset);
 

@@ -21,12 +21,15 @@ public:
 	void addSector(const Sector& sector);
 	void addSubsector(const Subsector& subsector);
 
+	void addThing(const Thing& thing);
+
 	void renderAutoMap(SDL_Renderer* pRenderer);
-	void renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum);
+	void renderBSPNode(SDL_Renderer* pRenderer, int16_t bspNum,int x, int y);
 
 	bool leftSide(int x, int y, int16_t nodeID);
 
 	std::vector<Node> getNodes();
+	Thing getThings();
 
 
 
@@ -39,6 +42,8 @@ protected:
 	std::vector<Seg> segs{};
 	std::vector<Sector> sectors{};
 	std::vector<Subsector> subsectors{};
+	std::vector<Thing> things{};
+
 
 	int xMin;
 	int xMax;

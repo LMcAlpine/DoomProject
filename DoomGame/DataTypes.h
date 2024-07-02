@@ -89,6 +89,15 @@ struct Subsector
 	uint16_t firstSegNumber{};
 };
 
+struct Thing
+{
+	int16_t xPosition{};
+	int16_t yPosition{};
+	int16_t angle{};
+	int16_t thingType{};
+	int16_t flags{};
+};
+
 
 
 enum LumpsIndex

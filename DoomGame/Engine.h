@@ -4,6 +4,7 @@
 #include <string>
 #include "WADReader.h"
 #include "Level.h"
+#include "Player.h"
 class Engine
 {
 public:
@@ -34,6 +35,7 @@ protected:
 
 	WADReader wadReader{};
 	Level* level{};
+	Player* player{};
 
 };
 
