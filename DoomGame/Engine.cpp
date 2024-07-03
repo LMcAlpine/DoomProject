@@ -1,28 +1,36 @@
 // Engine.cpp
 #include "Engine.h"
 
-Engine::Engine() : isGameOver(false), renderWidth(320), renderHeight(200)
+Engine::Engine(SDL_Renderer* renderer) : renderer(renderer), isGameOver(false), renderWidth(320), renderHeight(200)
 {
-	level = new Level("E1M1");
+
+
 }
 
 Engine::~Engine()
 {
 	delete level;
+	delete player;
 }
 
 bool Engine::init()
 {
+	player = new Player(0);
+	level = new Level("E1M1", renderer, player);
 	auto buffer = wadReader.readWAD("./DOOM.WAD");
 	wadReader.readLevelData(buffer, level);
+	Thing thing = level->getThings();
+	player->setXPosition(thing.xPosition);
+	player->setYPosition(thing.yPosition);
+	player->setAngle(thing.angle);
 	return true;
 }
 
-void Engine::render(SDL_Renderer* pRenderer)
+void Engine::render()
 {
-	SDL_SetRenderDrawColor(pRenderer, 0x00, 0x00, 0x00, 0x00);
-	SDL_RenderClear(pRenderer);
-	level->renderAutoMap(pRenderer);
+	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+	SDL_RenderClear(renderer);
+	level->renderPlayerView();
 }
 
 void Engine::keyPressed(SDL_Event& event)

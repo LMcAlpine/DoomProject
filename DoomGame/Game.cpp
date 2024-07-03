@@ -4,7 +4,7 @@
 
 Game::Game() : windowWidth(1280), windowHeight(800)
 {
-	doomEngine = new Engine();
+	
 }
 
 Game::~Game()
@@ -23,7 +23,7 @@ bool Game::init()
 		return false;
 	}
 
-	window = SDL_CreateWindow(doomEngine->getName().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("MyDoomProject", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
 	if (!window)
 	{
 		std::cout << "SDL failed to create window! SDL_Error: " << SDL_GetError() << std::endl;
@@ -38,6 +38,14 @@ bool Game::init()
 	}
 
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	doomEngine = new Engine(renderer);
+
+	if (SDL_RenderSetLogicalSize(renderer, doomEngine->getRenderWidth(), doomEngine->getRenderHeight()) != 0)
+	{
+		std::cout << "SDL failed to set logical size! SDL_Error: " << SDL_GetError() << std::endl;
+		return false;
+	}
+
 
 	if (!doomEngine->init())
 	{
@@ -45,11 +53,7 @@ bool Game::init()
 		return false;
 	}
 
-	if (SDL_RenderSetLogicalSize(renderer, doomEngine->getRenderWidth(), doomEngine->getRenderHeight()) != 0)
-	{
-		std::cout << "SDL failed to set logical size! SDL_Error: " << SDL_GetError() << std::endl;
-		return false;
-	}
+
 
 	return true;
 }
@@ -78,7 +82,7 @@ void Game::render()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
 	SDL_RenderClear(renderer);
-	doomEngine->render(renderer);
+	doomEngine->render();
 	SDL_RenderPresent(renderer);
 }
 

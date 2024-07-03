@@ -4,11 +4,12 @@
 #include <string>
 
 #include "DataTypes.h"
+#include "Player.h"
 #include <SDL.h>
 class Level
 {
 public:
-	Level(std::string name);
+	Level(std::string name, SDL_Renderer* renderer, Player* player);
 	~Level();
 
 	std::string getName() const;
@@ -21,7 +22,22 @@ public:
 	void addSector(const Sector& sector);
 	void addSubsector(const Subsector& subsector);
 
-	void renderAutoMap(SDL_Renderer* pRenderer);
+	void addThing(const Thing& thing);
+
+
+	void renderPlayerView();
+	void renderAutoMap();
+	void renderPlayer();
+	void renderBSPNode(int16_t bspNum);
+
+	bool leftSide(int x, int y, int16_t nodeID);
+	void renderSubsector(int16_t subsectorID);
+
+	std::vector<Node> getNodes();
+	Thing getThings();
+
+	int16_t remapXToScreen(int16_t x);
+	int16_t remapYToScreen(int16_t y);
 
 
 
@@ -34,11 +50,19 @@ protected:
 	std::vector<Seg> segs{};
 	std::vector<Sector> sectors{};
 	std::vector<Subsector> subsectors{};
+	std::vector<Thing> things{};
+
 
 	int xMin;
 	int xMax;
 	int yMin;
 	int yMax;
+	int renderXSize{};
+	int renderYSize{};
 	int autoMapScaleFactor;
+
+
+	SDL_Renderer* renderer;
+	Player* player{};
 };
 
