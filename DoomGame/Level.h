@@ -24,13 +24,20 @@ public:
 
 	void addThing(const Thing& thing);
 
+
+	void renderPlayerView();
 	void renderAutoMap();
+	void renderPlayer();
 	void renderBSPNode(int16_t bspNum);
 
 	bool leftSide(int x, int y, int16_t nodeID);
 	void renderSubsector(int16_t subsectorID);
+
 	std::vector<Node> getNodes();
 	Thing getThings();
+
+	int16_t remapXToScreen(int16_t x);
+	int16_t remapYToScreen(int16_t y);
 
 
 
@@ -50,6 +57,8 @@ protected:
 	int xMax;
 	int yMin;
 	int yMax;
+	int renderXSize{};
+	int renderYSize{};
 	int autoMapScaleFactor;
 
 

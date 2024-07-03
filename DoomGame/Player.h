@@ -4,11 +4,8 @@
 class Player
 {
 public:
-	/*Player(int id, int16_t xPosition, int16_t yPosition, int16_t angle);*/
 	Player(int id);
 	~Player();
-
-	void update();
 
 	void setXPosition(int16_t xPosition);
 	void setYPosition(int16_t yPosition);

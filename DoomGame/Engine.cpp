@@ -30,8 +30,7 @@ void Engine::render()
 {
 	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(renderer);
-	level->renderAutoMap();
-	level->renderBSPNode(level->getNodes().size() - 1);
+	level->renderPlayerView();
 }
 
 void Engine::keyPressed(SDL_Event& event)
@@ -49,8 +48,6 @@ void Engine::quit()
 
 void Engine::update()
 {
-	//player->update();
-
 }
 
 bool Engine::isOver()

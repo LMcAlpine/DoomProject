@@ -39,17 +39,21 @@ bool Game::init()
 
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	doomEngine = new Engine(renderer);
-	if (!doomEngine->init())
-	{
-		std::cout << doomEngine->getName() << " failed to initialize!" << std::endl;
-		return false;
-	}
 
 	if (SDL_RenderSetLogicalSize(renderer, doomEngine->getRenderWidth(), doomEngine->getRenderHeight()) != 0)
 	{
 		std::cout << "SDL failed to set logical size! SDL_Error: " << SDL_GetError() << std::endl;
 		return false;
 	}
+
+
+	if (!doomEngine->init())
+	{
+		std::cout << doomEngine->getName() << " failed to initialize!" << std::endl;
+		return false;
+	}
+
+
 
 	return true;
 }

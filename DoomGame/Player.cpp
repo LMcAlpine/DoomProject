@@ -9,13 +9,6 @@ Player::~Player()
 {
 }
 
-
-
-void Player::update()
-{
-
-}
-
 void Player::setXPosition(int16_t xPosition)
 {
 	this->xPosition = xPosition;

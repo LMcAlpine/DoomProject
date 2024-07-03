@@ -2,7 +2,9 @@
 
 Level::Level(std::string name, SDL_Renderer* renderer, Player* player) : name(name), renderer(renderer), player(player), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
 {
-
+	SDL_RenderGetLogicalSize(renderer, &renderXSize, &renderYSize);
+	--renderXSize;
+	--renderYSize;
 }
 
 
@@ -71,18 +73,19 @@ void Level::addThing(const Thing& thing)
 	things.push_back(thing);
 }
 
+void Level::renderPlayerView()
+{
+	renderPlayer();
+	//renderAutoMap();
+	renderBSPNode(getNodes().size() - 1);
+
+
+}
+
 void Level::renderAutoMap()
 {
 	int xShift = -xMin;
 	int yShift = -yMin;
-
-	int renderXSize;
-	int renderYSize;
-
-	SDL_RenderGetLogicalSize(renderer, &renderXSize, &renderYSize);
-
-	--renderXSize;
-	--renderYSize;
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	for (Linedef& linedef : linedefs)
@@ -91,33 +94,64 @@ void Level::renderAutoMap()
 		Vertex vertexEnd = vertexes.at(linedef.endVertex);
 
 		SDL_RenderDrawLine(renderer,
-			(vertexStart.x + xShift) / autoMapScaleFactor,
-			renderYSize - (vertexStart.y + yShift) / autoMapScaleFactor,
-			(vertexEnd.x + xShift) / autoMapScaleFactor,
-			renderYSize - (vertexEnd.y + yShift) / autoMapScaleFactor);
+			remapXToScreen(vertexStart.x),
+			remapYToScreen(vertexStart.y),
+			remapXToScreen(vertexEnd.x),
+			remapYToScreen(vertexEnd.y));
 	}
 }
 
+
+void Level::renderPlayer()
+{
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+
+	std::pair<int, int> direction[] = {
+		std::make_pair(-1, -1), std::make_pair(0, -1), std::make_pair(+1, -1),
+		std::make_pair(-1, 0), std::make_pair(0, 0), std::make_pair(+1, 0),
+		std::make_pair(-1, +1), std::make_pair(0, +1), std::make_pair(+1, +1)
+	};
+
+	for (int i = 0; i < 9; ++i)
+	{
+		SDL_RenderDrawPoint(renderer,
+			remapXToScreen(player->getXPosition()) + direction[i].first,
+			remapYToScreen(player->getYPosition()) + direction[i].second);
+	}
+}
+
+int16_t Level::remapXToScreen(int16_t x)
+{
+	return (x + (-xMin)) / autoMapScaleFactor;
+}
+
+int16_t Level::remapYToScreen(int16_t y)
+{
+	return renderYSize - (y + (-yMin)) / autoMapScaleFactor;
+}
+
+
+
 void Level::renderBSPNode(int16_t bspNum)
 {
-	int16_t i = bspNum & 0x8000;
 	if (bspNum & 0x8000)
 	{
-		int16_t r = bspNum & (~0x8000);
-		int r2 = r;
 		renderSubsector(bspNum & (~0x8000));
+		return;
 	}
 
 	bool onLeft = leftSide(player->getXPosition(), player->getYPosition(), bspNum);
 
-	Node bsp;
-	bsp = nodes.at(bspNum);
+
+	Node bsp = nodes.at(bspNum);
 	if (onLeft)
 	{
+		renderBSPNode(bsp.rightChild);
 		renderBSPNode(bsp.leftChild);
 	}
 	else
 	{
+		renderBSPNode(bsp.leftChild);
 		renderBSPNode(bsp.rightChild);
 	}
 
@@ -133,6 +167,21 @@ bool Level::leftSide(int x, int y, int16_t nodeID)
 
 void Level::renderSubsector(int16_t subsectorID)
 {
+	Subsector subsector = subsectors.at(subsectorID);
+	SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
+
+	for (int i = 0; i < subsector.segCount; i++)
+	{
+		Seg seg = segs[subsector.firstSegNumber + i];
+		SDL_RenderDrawLine(renderer,
+			remapXToScreen(vertexes.at(seg.startingVertexNumber).x),
+			remapYToScreen(vertexes.at(seg.startingVertexNumber).y),
+			remapXToScreen(vertexes.at(seg.endingVertexNumber).x),
+			remapYToScreen(vertexes.at(seg.endingVertexNumber).y));
+
+	}
+	//SDL_RenderPresent(renderer); 
+	//SDL_Delay(100);
 }
 
 std::vector<Node> Level::getNodes()
