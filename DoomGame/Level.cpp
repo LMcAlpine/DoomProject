@@ -175,7 +175,7 @@ void Level::renderBSPNode(int16_t bspNum)
 		int x1 = remapXToScreen(bsp.x);
 		int y1 = remapYToScreen(bsp.y);
 		int x2 = remapXToScreen(bsp.x + bsp.changeInX);
-		int y2 = remapYToScreen(bsp.y + bsp.changeInY);d
+		int y2 = remapYToScreen(bsp.y + bsp.changeInY);
 		SDL_RenderDrawLine(renderer, 
 			remapXToScreen(bsp.x), 
 			remapYToScreen(bsp.y), 
