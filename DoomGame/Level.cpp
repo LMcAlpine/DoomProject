@@ -1,4 +1,6 @@
 #include "Level.h"
+#include <cmath>
+#include <math.h>
 
 Level::Level(std::string name, SDL_Renderer* renderer, Player* player) : name(name), renderer(renderer), player(player), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
 {
@@ -169,17 +171,17 @@ void Level::renderBSPNode(int16_t bspNum)
 
 	// draw the partition line in yellow for the root node division
 	// I drew the partition line in yellow, now I want to draw a small hashmark drawn at the midpoint of the partition lines right side
-	if (bspNum == 237)
+	if (bspNum == 236)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
 		int x1 = remapXToScreen(bsp.x);
 		int y1 = remapYToScreen(bsp.y);
 		int x2 = remapXToScreen(bsp.x + bsp.changeInX);
 		int y2 = remapYToScreen(bsp.y + bsp.changeInY);
-		SDL_RenderDrawLine(renderer, 
-			remapXToScreen(bsp.x), 
-			remapYToScreen(bsp.y), 
-			remapXToScreen(bsp.x + bsp.changeInX), 
+		SDL_RenderDrawLine(renderer,
+			remapXToScreen(bsp.x),
+			remapYToScreen(bsp.y),
+			remapXToScreen(bsp.x + bsp.changeInX),
 			remapYToScreen(bsp.y + bsp.changeInY));
 
 		// draw midpoint
@@ -187,20 +189,30 @@ void Level::renderBSPNode(int16_t bspNum)
 		// Okay, well extending it by subtracting does not accurately determine the right side of the partition line. 
 		int midpointX = (x1 + x2) / 2;
 		int midpointY = (y1 + y2) / 2;
+
+
+		int dx = x2 - x1;
+		int dy = y2 - y1;
+		
+		int perpX = -dy;
+		int perpY = dx;
+
+		// normalize
+		int mag = std::sqrt(pow(perpX, 2) + pow(perpY, 2));
+		if (mag != 0)
+		{
+			perpX /= mag;
+			perpY /= mag;
+		}
+
+		// using the perpendicular vector to find the new point to draw towards, add it to the midpoint because that is where we want 
+		// to start
+		int endX = midpointX + perpX;
+		int endY = midpointY + perpY;
+
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, midpointX, midpointY, midpointX-2, midpointY);
+		SDL_RenderDrawLine(renderer, midpointX, midpointY, endX, endY);
 	}
-	
-
-	//SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
-	//if (bspNum == 237)
-	//{
-	//Node bsp2 = nodes.at(bspNum);
-	//SDL_RenderDrawLine(renderer, remapXToScreen(bsp2.x), remapYToScreen(bsp2.y), remapXToScreen(bsp2.x + bsp2.changeInX), remapYToScreen(bsp2.y + bsp2.changeInY));
-	//	SDL_RenderPresent(renderer); 
-	   // SDL_Delay(100);
-	//}
-
 
 	if (onLeft)
 	{
