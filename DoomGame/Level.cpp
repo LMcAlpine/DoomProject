@@ -139,32 +139,10 @@ void Level::renderBSPNode(int16_t bspNum)
 	if (bspNum & 0x8000)
 	{
 		//renderSubsector(bspNum & (~0x8000));
-		//int16_t subsectorID = bspNum & (~0x8000);
-		//Subsector subsector = subsectors.at(subsectorID);
-		//SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
-
-
-
-
-
-		//for (int i = 0; i < subsector.segCount; i++)
-		//{
-		//	// draw segs
-		//	Seg seg = segs[subsector.firstSegNumber + i];
-		//	SDL_RenderDrawLine(renderer,
-		//		remapXToScreen(vertexes.at(seg.startingVertexNumber).x),
-		//		remapYToScreen(vertexes.at(seg.startingVertexNumber).y),
-		//		remapXToScreen(vertexes.at(seg.endingVertexNumber).x),
-		//		remapYToScreen(vertexes.at(seg.endingVertexNumber).y));
-
-		//}
-		//SDL_RenderPresent(renderer); 
-		//SDL_Delay(100);
 		return;
 	}
 
 	bool onLeft = leftSide(player->getXPosition(), player->getYPosition(), bspNum);
-
 
 	Node bsp = nodes.at(bspNum);
 
@@ -178,11 +156,7 @@ void Level::renderBSPNode(int16_t bspNum)
 		int y1 = remapYToScreen(bsp.y);
 		int x2 = remapXToScreen(bsp.x + bsp.changeInX);
 		int y2 = remapYToScreen(bsp.y + bsp.changeInY);
-		SDL_RenderDrawLine(renderer,
-			remapXToScreen(bsp.x),
-			remapYToScreen(bsp.y),
-			remapXToScreen(bsp.x + bsp.changeInX),
-			remapYToScreen(bsp.y + bsp.changeInY));
+		SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 
 		// draw midpoint
 		// Now I drew the midpoint, so lets extend it to the right side of the partition line
@@ -193,7 +167,7 @@ void Level::renderBSPNode(int16_t bspNum)
 
 		int dx = x2 - x1;
 		int dy = y2 - y1;
-		
+
 		int perpX = -dy;
 		int perpY = dx;
 
