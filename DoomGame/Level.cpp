@@ -168,10 +168,25 @@ void Level::renderBSPNode(int16_t bspNum)
 
 
 	// draw the partition line in yellow for the root node division
+	// I drew the partition line in yellow, now I want to draw a small hashmark drawn at the midpoint of the partition lines right side
 	if (bspNum == 237)
 	{
 		SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, remapXToScreen(bsp.x), remapYToScreen(bsp.y), remapXToScreen(bsp.x + bsp.changeInX), remapYToScreen(bsp.y + bsp.changeInY));
+		int x1 = remapXToScreen(bsp.x);
+		int y1 = remapYToScreen(bsp.y);
+		int x2 = remapXToScreen(bsp.x + bsp.changeInX);
+		int y2 = remapYToScreen(bsp.y + bsp.changeInY);d
+		SDL_RenderDrawLine(renderer, 
+			remapXToScreen(bsp.x), 
+			remapYToScreen(bsp.y), 
+			remapXToScreen(bsp.x + bsp.changeInX), 
+			remapYToScreen(bsp.y + bsp.changeInY));
+
+		// draw midpoint
+		int midpointX = (x1 + x2) / 2;
+		int midpointY = (y1 + y2) / 2;
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawLine(renderer, midpointX, midpointY, midpointX, midpointY);
 	}
 	
 
