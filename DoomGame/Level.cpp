@@ -75,8 +75,8 @@ void Level::addThing(const Thing& thing)
 
 void Level::renderPlayerView()
 {
-	renderPlayer();
-	//renderAutoMap();
+	//renderPlayer();
+	renderAutoMap();
 	renderBSPNode(getNodes().size() - 1);
 
 
@@ -87,7 +87,7 @@ void Level::renderAutoMap()
 	int xShift = -xMin;
 	int yShift = -yMin;
 
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(renderer, 83, 83, 83, SDL_ALPHA_OPAQUE);
 	for (Linedef& linedef : linedefs)
 	{
 		Vertex vertexStart = vertexes.at(linedef.startVertex);
@@ -136,7 +136,28 @@ void Level::renderBSPNode(int16_t bspNum)
 {
 	if (bspNum & 0x8000)
 	{
-		renderSubsector(bspNum & (~0x8000));
+		//renderSubsector(bspNum & (~0x8000));
+		//int16_t subsectorID = bspNum & (~0x8000);
+		//Subsector subsector = subsectors.at(subsectorID);
+		//SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
+
+
+
+
+
+		//for (int i = 0; i < subsector.segCount; i++)
+		//{
+		//	// draw segs
+		//	Seg seg = segs[subsector.firstSegNumber + i];
+		//	SDL_RenderDrawLine(renderer,
+		//		remapXToScreen(vertexes.at(seg.startingVertexNumber).x),
+		//		remapYToScreen(vertexes.at(seg.startingVertexNumber).y),
+		//		remapXToScreen(vertexes.at(seg.endingVertexNumber).x),
+		//		remapYToScreen(vertexes.at(seg.endingVertexNumber).y));
+
+		//}
+		//SDL_RenderPresent(renderer); 
+		//SDL_Delay(100);
 		return;
 	}
 
@@ -144,6 +165,26 @@ void Level::renderBSPNode(int16_t bspNum)
 
 
 	Node bsp = nodes.at(bspNum);
+
+
+	// draw the partition line in yellow for the root node division
+	if (bspNum == 237)
+	{
+		SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawLine(renderer, remapXToScreen(bsp.x), remapYToScreen(bsp.y), remapXToScreen(bsp.x + bsp.changeInX), remapYToScreen(bsp.y + bsp.changeInY));
+	}
+	
+
+	//SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
+	//if (bspNum == 237)
+	//{
+	//Node bsp2 = nodes.at(bspNum);
+	//SDL_RenderDrawLine(renderer, remapXToScreen(bsp2.x), remapYToScreen(bsp2.y), remapXToScreen(bsp2.x + bsp2.changeInX), remapYToScreen(bsp2.y + bsp2.changeInY));
+	//	SDL_RenderPresent(renderer); 
+	   // SDL_Delay(100);
+	//}
+
+
 	if (onLeft)
 	{
 		renderBSPNode(bsp.rightChild);
@@ -168,10 +209,12 @@ bool Level::leftSide(int x, int y, int16_t nodeID)
 void Level::renderSubsector(int16_t subsectorID)
 {
 	Subsector subsector = subsectors.at(subsectorID);
-	SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
+	//SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
 
 	for (int i = 0; i < subsector.segCount; i++)
 	{
+		// draw segs
 		Seg seg = segs[subsector.firstSegNumber + i];
 		SDL_RenderDrawLine(renderer,
 			remapXToScreen(vertexes.at(seg.startingVertexNumber).x),
