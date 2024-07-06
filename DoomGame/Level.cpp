@@ -183,10 +183,12 @@ void Level::renderBSPNode(int16_t bspNum)
 			remapYToScreen(bsp.y + bsp.changeInY));
 
 		// draw midpoint
+		// Now I drew the midpoint, so lets extend it to the right side of the partition line
+		// Okay, well extending it by subtracting does not accurately determine the right side of the partition line. 
 		int midpointX = (x1 + x2) / 2;
 		int midpointY = (y1 + y2) / 2;
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, midpointX, midpointY, midpointX, midpointY);
+		SDL_RenderDrawLine(renderer, midpointX, midpointY, midpointX-2, midpointY);
 	}
 	
 
