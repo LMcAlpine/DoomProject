@@ -24,33 +24,28 @@ bool Engine::init()
 	auto subsectors = level->getSubsectors();
 	auto segs = level->getSegs();
 	auto vertexes = level->getVertexes();
-	std::string points = "(";
+	std::string desmos_entries;
 	for (int i = 0; i < subsectors.size(); i++)
 	{
-		if (i != 0)
-		{
-			points += "(";
-		}
+
 		for (int j = 0; j < subsectors.at(i).segCount; j++)
 		{
-			if (j != 0)
-			{
-				points += "(";
-			}
-			//std::cout << vertexes.at(segs.at((subsectors.at(i).firstSegNumber)).startingVertexNumber).x  << std::endl;
-			int x = vertexes.at(segs.at((subsectors.at(i).firstSegNumber+j)).startingVertexNumber).x;
-			points += std::to_string(x);
-			points += ",";
-			points += std::to_string(vertexes.at(segs.at((subsectors.at(i).firstSegNumber+j)).startingVertexNumber).y);
-			points += "), ";
+			int x = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).startingVertexNumber).x;
+			int y = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).startingVertexNumber).y;
+
+			// Create a new entry for each point
+			desmos_entries += "(" + std::to_string(x) + "," + std::to_string(y) + ")\n";
 
 			//int x2 = vertexes.at(segs.at((subsectors.at(i).firstSegNumber)).startingVertexNumber).x;
 		}
 		
 	}
-	points.pop_back();
-	points.pop_back();
-	std::cout << points << std::endl;
+	// Remove the last newline character
+	if (!desmos_entries.empty())
+	{
+		desmos_entries.pop_back();
+	}
+	std::cout << desmos_entries << std::endl;
 
 
 
