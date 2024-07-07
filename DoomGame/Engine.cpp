@@ -20,6 +20,41 @@ bool Engine::init()
 	auto buffer = wadReader.readWAD("./DOOM.WAD");
 	wadReader.readLevelData(buffer, level);
 	Thing thing = level->getThings();
+
+	auto subsectors = level->getSubsectors();
+	auto segs = level->getSegs();
+	auto vertexes = level->getVertexes();
+	std::string points = "(";
+	for (int i = 0; i < subsectors.size(); i++)
+	{
+		if (i != 0)
+		{
+			points += "(";
+		}
+		for (int j = 0; j < subsectors.at(i).segCount; j++)
+		{
+			if (j != 0)
+			{
+				points += "(";
+			}
+			//std::cout << vertexes.at(segs.at((subsectors.at(i).firstSegNumber)).startingVertexNumber).x  << std::endl;
+			int x = vertexes.at(segs.at((subsectors.at(i).firstSegNumber+j)).startingVertexNumber).x;
+			points += std::to_string(x);
+			points += ",";
+			points += std::to_string(vertexes.at(segs.at((subsectors.at(i).firstSegNumber+j)).startingVertexNumber).y);
+			points += "), ";
+
+			//int x2 = vertexes.at(segs.at((subsectors.at(i).firstSegNumber)).startingVertexNumber).x;
+		}
+		
+	}
+	points.pop_back();
+	points.pop_back();
+	std::cout << points << std::endl;
+
+
+
+
 	player->setXPosition(thing.xPosition);
 	player->setYPosition(thing.yPosition);
 	player->setAngle(thing.angle);
