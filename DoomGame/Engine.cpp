@@ -34,10 +34,13 @@ bool Engine::init()
 			int y = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).startingVertexNumber).y;
 
 			// Create a new entry for each point
-			desmos_entries += "(" + std::to_string(x) + "," + std::to_string(y) + ")\n";
+			desmos_entries += "(" + std::to_string(x) + "," + std::to_string(y) + "), ";
 
 			//int x2 = vertexes.at(segs.at((subsectors.at(i).firstSegNumber)).startingVertexNumber).x;
 		}
+		desmos_entries.pop_back();
+		desmos_entries.pop_back();
+		desmos_entries += "\n";
 		
 	}
 	// Remove the last newline character
