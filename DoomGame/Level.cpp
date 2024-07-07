@@ -149,44 +149,76 @@ void Level::renderBSPNode(int16_t bspNum)
 
 	// draw the partition line in yellow for the root node division
 	// I drew the partition line in yellow, now I want to draw a small hashmark drawn at the midpoint of the partition lines right side
-	if (bspNum == 236)
+	// I have the hashmark now.
+	// I want to extend the partition line to the borders of the bounding box. 
+	// Draw the extension in blue. 
+	SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+	int x1 = remapXToScreen(bsp.x);
+	int y1 = remapYToScreen(bsp.y);
+	int x2 = remapXToScreen(bsp.x + bsp.changeInX);
+	int y2 = remapYToScreen(bsp.y + bsp.changeInY);
+	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+
+	// draw midpoint
+	// Now I drew the midpoint, so lets extend it to the right side of the partition line
+	// Okay, well extending it by subtracting does not accurately determine the right side of the partition line. 
+	int midpointX = (x1 + x2) / 2;
+	int midpointY = (y1 + y2) / 2;
+
+
+	int dx = x2 - x1;
+	int dy = y2 - y1;
+
+	int perpX = -dy;
+	int perpY = dx;
+
+	// normalize
+	int mag = std::sqrt(pow(perpX, 2) + pow(perpY, 2));
+	if (mag != 0)
 	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
-		int x1 = remapXToScreen(bsp.x);
-		int y1 = remapYToScreen(bsp.y);
-		int x2 = remapXToScreen(bsp.x + bsp.changeInX);
-		int y2 = remapYToScreen(bsp.y + bsp.changeInY);
-		SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-
-		// draw midpoint
-		// Now I drew the midpoint, so lets extend it to the right side of the partition line
-		// Okay, well extending it by subtracting does not accurately determine the right side of the partition line. 
-		int midpointX = (x1 + x2) / 2;
-		int midpointY = (y1 + y2) / 2;
-
-
-		int dx = x2 - x1;
-		int dy = y2 - y1;
-
-		int perpX = -dy;
-		int perpY = dx;
-
-		// normalize
-		int mag = std::sqrt(pow(perpX, 2) + pow(perpY, 2));
-		if (mag != 0)
-		{
-			perpX /= mag;
-			perpY /= mag;
-		}
-
-		// using the perpendicular vector to find the new point to draw towards, add it to the midpoint because that is where we want 
-		// to start
-		int endX = midpointX + perpX;
-		int endY = midpointY + perpY;
-
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(renderer, midpointX, midpointY, endX, endY);
+		perpX /= mag;
+		perpY /= mag;
 	}
+
+	// using the perpendicular vector to find the new point to draw towards, add it to the midpoint because that is where we want 
+	// to start
+	int endX = midpointX + perpX;
+	int endY = midpointY + perpY;
+
+	SDL_RenderDrawLine(renderer, midpointX, midpointY, endX, endY);
+
+	// anytime I am trying to draw world coordinates to the screen. I need to get the screen coordinate
+	int rightBoxLeftX = remapXToScreen(bsp.rightBoundingBox.left);
+	int rightBoxRightX = remapXToScreen(bsp.rightBoundingBox.right);
+	int rightBoxTopY = remapYToScreen(bsp.rightBoundingBox.top);
+	int rightBoxBottomY = remapYToScreen(bsp.rightBoundingBox.bottom);
+
+	int leftBoxLeftX = remapXToScreen(bsp.leftBoundingBox.left);
+	int leftBoxRightX = remapXToScreen(bsp.leftBoundingBox.right);
+	int leftBoxTopY = remapYToScreen(bsp.leftBoundingBox.top);
+	int leftBoxBottomY = remapYToScreen(bsp.leftBoundingBox.bottom);
+
+
+	SDL_Rect rect;
+	rect.x = rightBoxLeftX;
+	rect.y = rightBoxTopY;
+	rect.w = (rightBoxRightX - rightBoxLeftX);
+	rect.h = (rightBoxBottomY - rightBoxTopY);
+
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderDrawRect(renderer, &rect);
+
+	SDL_Rect rect2;
+	rect2.x = leftBoxLeftX;
+	rect2.y = leftBoxTopY;
+	rect2.w = (leftBoxRightX - leftBoxLeftX);
+	rect2.h = (leftBoxBottomY - leftBoxTopY);
+
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderDrawRect(renderer, &rect2);
+
+	//SDL_RenderPresent(renderer);
+	//SDL_Delay(100);
 
 	if (onLeft)
 	{
