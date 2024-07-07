@@ -27,27 +27,31 @@ bool Engine::init()
 	std::string desmos_entries;
 	for (int i = 0; i < subsectors.size(); i++)
 	{
-
+		desmos_entries += "([";
 		for (int j = 0; j < subsectors.at(i).segCount; j++)
 		{
 			int x = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).startingVertexNumber).x;
 			int y = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).startingVertexNumber).y;
 
+			int x2 = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).endingVertexNumber).x;
+			int y2 = vertexes.at(segs.at((subsectors.at(i).firstSegNumber + j)).endingVertexNumber).y;
+
 			// Create a new entry for each point
-			desmos_entries += "(" + std::to_string(x) + "," + std::to_string(y) + "), ";
+			desmos_entries += "(" + std::to_string(x) + "," + std::to_string(y) + ")," + "(" + std::to_string(x2) + "," + std::to_string(y2) + "),";
 
 			//int x2 = vertexes.at(segs.at((subsectors.at(i).firstSegNumber)).startingVertexNumber).x;
 		}
+		// Remove the last comma and close the list
 		desmos_entries.pop_back();
-		desmos_entries.pop_back();
-		desmos_entries += "\n";
-		
+		desmos_entries += "])\n";
+
 	}
-	// Remove the last newline character
+
 	if (!desmos_entries.empty())
 	{
 		desmos_entries.pop_back();
 	}
+
 	std::cout << desmos_entries << std::endl;
 
 
