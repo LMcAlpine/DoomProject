@@ -35,6 +35,9 @@ public:
 
 	std::vector<Node> getNodes();
 	Thing getThings();
+	std::vector<Subsector> getSubsectors();
+	std::vector<Vertex> getVertexes();
+	std::vector<Seg> getSegs();
 
 	int16_t remapXToScreen(int16_t x);
 	int16_t remapYToScreen(int16_t y);
