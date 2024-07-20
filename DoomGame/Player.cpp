@@ -39,7 +39,7 @@ int16_t Player::getYPosition()
 	return yPosition;
 }
 
-int16_t Player::getAngle()
+uint32_t Player::getAngle()
 {
 	return angle;
 }

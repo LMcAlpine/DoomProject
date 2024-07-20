@@ -15,6 +15,8 @@ public:
 	Angle operator+(const Angle& other) const;
 	Angle operator-(const Angle& other) const;
 
+	Angle& operator-=(const unsigned int& other);
+
 	Fixed floatToFixed(float f);
 	float fixedToFloat(Fixed f);
 
@@ -24,6 +26,10 @@ public:
 	static Angle fromRadians(double radians);
 	double toRadians() const;
 	double toDegrees() const;
+
+	bool operator>=(const Angle& other);
+
+	bool operator>=(const unsigned int& other);
 
 
 	uint32_t getAngle();

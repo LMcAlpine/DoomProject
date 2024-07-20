@@ -334,66 +334,49 @@ void Level::renderSubsector(int16_t subsectorID)
 		// draw segs
 		Seg seg = segs[subsector.firstSegNumber + i];
 
-		Angle ang(renderPointToAngle(vertexes.at(seg.startingVertexNumber).x, vertexes.at(seg.startingVertexNumber).y));
+		Angle ang1(renderPointToAngle(vertexes.at(seg.startingVertexNumber).x, vertexes.at(seg.startingVertexNumber).y));
+		Angle ang2(renderPointToAngle(vertexes.at(seg.endingVertexNumber).x, vertexes.at(seg.endingVertexNumber).y));
+
+		Angle span = ang1 - ang2;
+		if (span >= ANG180)
+		{
+			return;
+		}
+
+
+		//int32_t test = 90 * (1 << FRACBITS);
+
+		//int32_t pAngle = player->getAngle();
+
+		uint32_t a = ANG45* (player->getAngle() / 45);
+
+		ang1 -= a;
+		ang2 -= a;
+
 
 		// Convert to fixed-point
-		int64_t x = static_cast<int64_t> (vertexes.at(seg.startingVertexNumber).x) << 16;
-		int64_t y = static_cast<int64_t>(vertexes.at(seg.startingVertexNumber).y) << 16;
-		int64_t px = static_cast<int64_t>(player->getXPosition()) << 16;
-		int64_t py = static_cast<int64_t>(player->getYPosition()) << 16;
+	//	int64_t x = static_cast<int64_t> (vertexes.at(seg.startingVertexNumber).x) << 16;
+		//int64_t y = static_cast<int64_t>(vertexes.at(seg.startingVertexNumber).y) << 16;
+		//int64_t px = static_cast<int64_t>(player->getXPosition()) << 16;
+		//int64_t py = static_cast<int64_t>(player->getYPosition()) << 16;
 
-		// Calculate differences
-		int64_t dx = x - px;
-		int64_t dy = y - py;
+		//// Calculate differences
+		//int64_t dx = x - px;
+		//int64_t dy = y - py;
 
-		// Convert back to floating-point for atan2
-		double fdx = static_cast<double>(dx) / (1 << 16);
-		double fdy = static_cast<double>(dy) / (1 << 16);
+		//// Convert back to floating-point for atan2
+		//double fdx = static_cast<double>(dx) / (1 << 16);
+		//double fdy = static_cast<double>(dy) / (1 << 16);
 
-		// Calculate angle using atan2
-		double angleRadians = std::atan2(fdy, fdx);
+		//// Calculate angle using atan2
+		//double angleRadians = std::atan2(fdy, fdx);
 
-		// Create Angle object
-		Angle angle = Angle::fromRadians(angleRadians);
+		//// Create Angle object
+		//Angle angle = Angle::fromRadians(angleRadians);
 
-		// Get angle in various formats
-		uint32_t angleBAM = angle.getAngle();
-		double angleDegrees = angle.toDegrees();
-
-
-	//	int x = vertexes.at(seg.startingVertexNumber).x << 16;
-	//	int px = player->getXPosition() << 16;
-	//	int adj2 = x - px;
-
-	//	//if (adj2 < 0)
-	//	//{
-	//	//	adj2 = -adj2;
-	//	//}
-
-	//
-
-	//	int y = vertexes.at(seg.startingVertexNumber).y << 16;
-	//	int py = player->getYPosition() << 16;
-	//	int opp2 = y-py;
-	////	if (opp2 < 0)
-	//	//{
-	//	//	opp2 = -opp2;
-	//	//}
-
-	//	int adj = vertexes.at(seg.startingVertexNumber).x - player->getXPosition();
-	//	int opp = vertexes.at(seg.startingVertexNumber).y - player->getYPosition();
-	//	int t = adj2 >> 16;
-	//	int r = atan2(adj2 >> 16, opp2 >> 16);
-	//	int r2 = atan2f(adj, opp) * 180 / M_PI;
-	//	Angle angle(r << 16);
-	//	uint32_t value = angle.getAngle();
-	//	float a = (angle.fixedToFloat(value))*(180/M_PI);
-
-	//	float fx = angle.fixedToFloat(adj2);
-	//	float fy = angle.fixedToFloat(opp2);
-	//	float angleRadians = atan2(fy, fx);
-
-	//	Angle::Fixed angleFixed = angle.floatToFixed(angleRadians);
+		//// Get angle in various formats
+		//uint32_t angleBAM = angle.getAngle();
+		//double angleDegrees = angle.toDegrees();
 
 
 		SDL_RenderDrawLine(renderer,

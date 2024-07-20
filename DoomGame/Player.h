@@ -14,7 +14,7 @@ public:
 	int getID();
 	int16_t getXPosition();
 	int16_t getYPosition();
-	int16_t getAngle();
+	uint32_t getAngle();
 
 protected:
 	int playerID{};
