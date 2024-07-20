@@ -2,6 +2,20 @@
 #include <cmath>
 #include <math.h>
 
+
+
+constexpr int FRACBITS = 16;
+constexpr int SLOPERANGE = 2048;
+constexpr int SLOPEBITS = 11;
+constexpr int DBITS = FRACBITS - SLOPEBITS;
+
+constexpr auto ANG45 = 0x20000000;
+constexpr auto ANG90 = 0x40000000;
+constexpr auto ANG180 = 0x80000000;
+constexpr auto ANG270 = 0xc0000000;
+constexpr auto ANG_MAX = 0xffffffff;
+
+
 Level::Level(std::string name, SDL_Renderer* renderer, Player* player) : name(name), renderer(renderer), player(player), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
 {
 	SDL_RenderGetLogicalSize(renderer, &renderXSize, &renderYSize);
@@ -132,6 +146,101 @@ int16_t Level::remapYToScreen(int16_t y)
 	return renderYSize - (y + (-yMin)) / autoMapScaleFactor;
 }
 
+uint32_t Level::renderPointToAngle(int x, int y)
+{
+	x -= player->getXPosition();
+	y -= player->getYPosition();
+
+	if ((!x) && (!y))
+		return 0;
+
+	if (x >= 0)
+	{
+		if (y >= 0)
+		{
+			if (x > y)
+			{
+				// Octant 0
+				return tantoangle[slopeDiv(y, x)];
+			}
+			else
+			{
+				// Octant 1
+				return ANG90 - 1 - tantoangle[slopeDiv(x, y)];
+			}
+		}
+		else
+		{
+			y = -y;
+			if (x > y)
+			{
+				// Octant 8
+				//return -tantoangle[slopeDiv(y, x)];
+				return ~tantoangle[slopeDiv(y, x)] + 1;
+			}
+			else
+			{
+				// Octant 7
+				return ANG270 + tantoangle[slopeDiv(x, y)];
+			}
+		}
+	}
+	else
+	{
+		x = -x;
+		if (y >= 0)
+		{
+			if (x > y)
+			{
+				// Octant 3
+				return ANG180 - 1 - tantoangle[slopeDiv(y, x)];
+			}
+			else
+			{
+				// Octant 2
+				return ANG90 + tantoangle[slopeDiv(x, y)];
+			}
+		}
+		else
+		{
+			y = -y;
+			if (x > y)
+			{
+				// Octant 4
+				return ANG180 + tantoangle[slopeDiv(y, x)];
+			}
+			else
+			{
+				// Octant 5
+				return ANG270 - 1 - tantoangle[slopeDiv(x, y)];
+			}
+		}
+	}
+}
+
+int Level::slopeDiv(unsigned int num, unsigned int den)
+{
+	unsigned ans;
+
+	if (den < 512)
+	{
+		return SLOPERANGE;
+	}
+	else
+	{
+		ans = (num << 3) / (den >> 8);
+
+		if (ans <= SLOPERANGE)
+		{
+			return ans;
+		}
+		else
+		{
+			return SLOPERANGE;
+		}
+	}
+}
+
 
 
 void Level::renderBSPNode(int16_t bspNum)
@@ -187,13 +296,15 @@ void Level::renderBSPNode(int16_t bspNum)
 
 	if (onLeft)
 	{
-		renderBSPNode(bsp.rightChild);
 		renderBSPNode(bsp.leftChild);
+		renderBSPNode(bsp.rightChild);
+
 	}
 	else
 	{
-		renderBSPNode(bsp.leftChild);
 		renderBSPNode(bsp.rightChild);
+		renderBSPNode(bsp.leftChild);
+	
 	}
 
 
@@ -212,10 +323,79 @@ void Level::renderSubsector(int16_t subsectorID)
 	SDL_SetRenderDrawColor(renderer, rand() % 255, rand() % 255, rand() % 255, SDL_ALPHA_OPAQUE);
 	//SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
 
+
+	// Try to clip segs
+	// convert both ends of the segment to an angle with respect to the players position
+	// 
+
+
 	for (int i = 0; i < subsector.segCount; i++)
 	{
 		// draw segs
 		Seg seg = segs[subsector.firstSegNumber + i];
+
+		Angle ang(renderPointToAngle(vertexes.at(seg.startingVertexNumber).x, vertexes.at(seg.startingVertexNumber).y));
+
+		// Convert to fixed-point
+		int64_t x = static_cast<int64_t> (vertexes.at(seg.startingVertexNumber).x) << 16;
+		int64_t y = static_cast<int64_t>(vertexes.at(seg.startingVertexNumber).y) << 16;
+		int64_t px = static_cast<int64_t>(player->getXPosition()) << 16;
+		int64_t py = static_cast<int64_t>(player->getYPosition()) << 16;
+
+		// Calculate differences
+		int64_t dx = x - px;
+		int64_t dy = y - py;
+
+		// Convert back to floating-point for atan2
+		double fdx = static_cast<double>(dx) / (1 << 16);
+		double fdy = static_cast<double>(dy) / (1 << 16);
+
+		// Calculate angle using atan2
+		double angleRadians = std::atan2(fdy, fdx);
+
+		// Create Angle object
+		Angle angle = Angle::fromRadians(angleRadians);
+
+		// Get angle in various formats
+		uint32_t angleBAM = angle.getAngle();
+		double angleDegrees = angle.toDegrees();
+
+
+	//	int x = vertexes.at(seg.startingVertexNumber).x << 16;
+	//	int px = player->getXPosition() << 16;
+	//	int adj2 = x - px;
+
+	//	//if (adj2 < 0)
+	//	//{
+	//	//	adj2 = -adj2;
+	//	//}
+
+	//
+
+	//	int y = vertexes.at(seg.startingVertexNumber).y << 16;
+	//	int py = player->getYPosition() << 16;
+	//	int opp2 = y-py;
+	////	if (opp2 < 0)
+	//	//{
+	//	//	opp2 = -opp2;
+	//	//}
+
+	//	int adj = vertexes.at(seg.startingVertexNumber).x - player->getXPosition();
+	//	int opp = vertexes.at(seg.startingVertexNumber).y - player->getYPosition();
+	//	int t = adj2 >> 16;
+	//	int r = atan2(adj2 >> 16, opp2 >> 16);
+	//	int r2 = atan2f(adj, opp) * 180 / M_PI;
+	//	Angle angle(r << 16);
+	//	uint32_t value = angle.getAngle();
+	//	float a = (angle.fixedToFloat(value))*(180/M_PI);
+
+	//	float fx = angle.fixedToFloat(adj2);
+	//	float fy = angle.fixedToFloat(opp2);
+	//	float angleRadians = atan2(fy, fx);
+
+	//	Angle::Fixed angleFixed = angle.floatToFixed(angleRadians);
+
+
 		SDL_RenderDrawLine(renderer,
 			remapXToScreen(vertexes.at(seg.startingVertexNumber).x),
 			remapYToScreen(vertexes.at(seg.startingVertexNumber).y),
