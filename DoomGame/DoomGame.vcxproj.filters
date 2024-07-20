@@ -36,6 +36,9 @@
     <ClCompile Include="Angle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Fixed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WADReader.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Angle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
