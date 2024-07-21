@@ -1,19 +1,8 @@
 #include "Level.h"
+#include "RenderUtilities.h"
 #include <cmath>
 #include <math.h>
 
-
-
-constexpr int FRACBITS = 16;
-constexpr int SLOPERANGE = 2048;
-constexpr int SLOPEBITS = 11;
-constexpr int DBITS = FRACBITS - SLOPEBITS;
-
-constexpr auto ANG45 = 0x20000000;
-constexpr auto ANG90 = 0x40000000;
-constexpr auto ANG180 = 0x80000000;
-constexpr auto ANG270 = 0xc0000000;
-constexpr auto ANG_MAX = 0xffffffff;
 
 
 Level::Level(std::string name, SDL_Renderer* renderer, Player* player) : name(name), renderer(renderer), player(player), xMin(INT_MAX), xMax(INT_MIN), yMin(INT_MAX), yMax(INT_MIN), autoMapScaleFactor(15)
@@ -146,102 +135,6 @@ int16_t Level::remapYToScreen(int16_t y)
 	return renderYSize - (y + (-yMin)) / autoMapScaleFactor;
 }
 
-uint32_t Level::renderPointToAngle(int x, int y)
-{
-	x -= player->getXPosition();
-	y -= player->getYPosition();
-
-	if ((!x) && (!y))
-		return 0;
-
-	if (x >= 0)
-	{
-		if (y >= 0)
-		{
-			if (x > y)
-			{
-				// Octant 0
-				return tantoangle[slopeDiv(y, x)];
-			}
-			else
-			{
-				// Octant 1
-				return ANG90 - 1 - tantoangle[slopeDiv(x, y)];
-			}
-		}
-		else
-		{
-			y = -y;
-			if (x > y)
-			{
-				// Octant 8
-				//return -tantoangle[slopeDiv(y, x)];
-				return ~tantoangle[slopeDiv(y, x)] + 1;
-			}
-			else
-			{
-				// Octant 7
-				return ANG270 + tantoangle[slopeDiv(x, y)];
-			}
-		}
-	}
-	else
-	{
-		x = -x;
-		if (y >= 0)
-		{
-			if (x > y)
-			{
-				// Octant 3
-				return ANG180 - 1 - tantoangle[slopeDiv(y, x)];
-			}
-			else
-			{
-				// Octant 2
-				return ANG90 + tantoangle[slopeDiv(x, y)];
-			}
-		}
-		else
-		{
-			y = -y;
-			if (x > y)
-			{
-				// Octant 4
-				return ANG180 + tantoangle[slopeDiv(y, x)];
-			}
-			else
-			{
-				// Octant 5
-				return ANG270 - 1 - tantoangle[slopeDiv(x, y)];
-			}
-		}
-	}
-}
-
-int Level::slopeDiv(unsigned int num, unsigned int den)
-{
-	unsigned ans;
-
-	if (den < 512)
-	{
-		return SLOPERANGE;
-	}
-	else
-	{
-		ans = (num << 3) / (den >> 8);
-
-		if (ans <= SLOPERANGE)
-		{
-			return ans;
-		}
-		else
-		{
-			return SLOPERANGE;
-		}
-	}
-}
-
-
 
 void Level::renderBSPNode(int16_t bspNum)
 {
@@ -334,11 +227,13 @@ void Level::renderSubsector(int16_t subsectorID)
 		// draw segs
 		Seg seg = segs[subsector.firstSegNumber + i];
 
-		Angle ang1(renderPointToAngle(vertexes.at(seg.startingVertexNumber).x, vertexes.at(seg.startingVertexNumber).y));
-		Angle ang2(renderPointToAngle(vertexes.at(seg.endingVertexNumber).x, vertexes.at(seg.endingVertexNumber).y));
+		Angle ang1(RenderUtilities::renderPointToAngle(vertexes.at(seg.startingVertexNumber).x, vertexes.at(seg.startingVertexNumber).y, player));
+		uint32_t testAngle = ang1.toDegrees();
+
+		Angle ang2(RenderUtilities::renderPointToAngle(vertexes.at(seg.endingVertexNumber).x, vertexes.at(seg.endingVertexNumber).y, player));
 
 		Angle span = ang1 - ang2;
-		if (span >= ANG180)
+		if (span >= RenderUtilities::ANG180)
 		{
 			return;
 		}
@@ -348,7 +243,7 @@ void Level::renderSubsector(int16_t subsectorID)
 
 		//int32_t pAngle = player->getAngle();
 
-		uint32_t a = ANG45* (player->getAngle() / 45);
+		uint32_t a = RenderUtilities::ANG45* (player->getAngle() / 45);
 
 		ang1 -= a;
 		ang2 -= a;
@@ -377,6 +272,16 @@ void Level::renderSubsector(int16_t subsectorID)
 		//// Get angle in various formats
 		//uint32_t angleBAM = angle.getAngle();
 		//double angleDegrees = angle.toDegrees();
+		
+		
+		// trying to use atan2 instead of the quadrant code
+	/*	int x1 = vertexes.at(seg.startingVertexNumber).x;
+		int y1 = vertexes.at(seg.startingVertexNumber).y;
+		double angleRad = std::atan2(y1, x1);
+		double degrees = (angleRad) * (180 / M_PI);
+		double angleDeg = std::fmod(angleRad * 180.0 / M_PI + 360.0, 360.0);
+		uint32_t doomAngle = static_cast<uint32_t>((angleDeg / 360.0) * 4294967296.0);*/
+	
 
 
 		SDL_RenderDrawLine(renderer,

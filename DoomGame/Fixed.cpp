@@ -6,18 +6,6 @@ constexpr int FRACBITS = 16;
 constexpr Fixed::fixed_t FRACUNIT = 1 << FRACBITS;
 
 
-
-Fixed::Fixed() 
-{
-
-}
-
-
-Fixed::~Fixed()
-{
-}
-
-
 Fixed::fixed_t Fixed::floatToFixed(float f)
 {
 	return static_cast<fixed_t>(f * FRACUNIT);
